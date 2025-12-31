@@ -1,0 +1,45 @@
+services:
+  # Servizio Database
+  db:
+    image: postgres:15-alpine
+    container_name: mentormatch_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: mentormatch
+    ports:
+      - "5435:5432" # Porta esterna:interna
+    volumes:
+      # Persistenza dei dati
+      - pgdata:/var/lib/postgresql/data
+      # Inizializzazione automatica dello schema
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d mentormatch"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Servizio Applicazione (Backend + Frontend)
+  app:
+    build: .
+    container_name: mentormatch_app
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: admin
+      DB_PASSWORD: password123
+      DB_DATABASE: mentormatch
+      DB_PORT: 5432
+      JWT_SECRET: la_tua_chiave_segreta_super_sicura # Cambia questa in produzione
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - /app/backend/node_modules
+
+volumes:
+  pgdata:

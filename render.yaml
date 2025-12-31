@@ -1,0 +1,39 @@
+services:
+  # Il Web Service (Node.js + Frontend)
+  - type: web
+    name: mentormatch-app
+    env: docker
+    plan: free
+    region: frankfurt # O 'oregon', 'singapore', etc.
+    branch: main # Assicurati che il tuo branch principale si chiami 'main' o 'master'
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: DB_HOST
+        fromDatabase:
+          name: mentormatch-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: mentormatch-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: mentormatch-db
+          property: password
+      - key: DB_DATABASE
+        fromDatabase:
+          name: mentormatch-db
+          property: database
+      - key: DB_PORT
+        value: 5432
+      - key: JWT_SECRET
+        generateValue: true # Render genererà una chiave sicura per noi
+      - key: FRONTEND_URL
+        value: https://mentormatch-app.onrender.com # Questo verrà aggiornato automaticamente o manualmente
+
+databases:
+  - name: mentormatch-db
+    plan: free
+    databaseName: mentormatch
+    user: admin
