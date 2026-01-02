@@ -10,13 +10,27 @@ $(document).ready(function() {
     ApiService.get('/users/me')
         .done(function(user) {
             // Popola i campi del form
+            $('#profile-name').text(`${user.name} ${user.surname || ''}`);
             $('#headline').val(user.sector || '');
             $('#bio').val(user.bio || '');
             $('#languages').val(user.languages ? user.languages.join(', ') : '');
             $('#hourly_rate').val(user.hourly_rate || ''); // Popola il prezzo
             
             if (user.avatar_url) {
-                $('#avatar-preview').attr('src', `http://localhost:3000${user.avatar_url}`);
+                // Usa BASE_URL se definito in global.js, altrimenti percorso relativo
+                const baseUrl = ApiService.BASE_URL || '';
+                $('#avatar-preview').attr('src', `${baseUrl}${user.avatar_url}`);
+            }
+
+            // Badge Ruolo
+            const roleBadge = user.role === 'mentor' 
+                ? '<span class="badge bg-primary rounded-pill px-3">Mentor</span>' 
+                : '<span class="badge bg-secondary rounded-pill px-3">Mentee</span>';
+            $('#profile-role-badge').html(roleBadge);
+
+            if (user.role === 'mentor') {
+                $('#mentor-rating-display').show();
+                $('#rating-value').text(user.rating_avg || '0.0');
             }
         })
         .fail(function(xhr) {
@@ -24,19 +38,28 @@ $(document).ready(function() {
             showToast('Impossibile caricare i dati del profilo.', 'danger');
         });
 
-    // 2. Gestione Upload Avatar
-    $('#avatar-form').on('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        
-        ApiService.upload('/users/avatar', formData)
-            .done(function(response) {
-                $('#avatar-preview').attr('src', `http://localhost:3000${response.avatar_url}`);
-                showToast('Foto profilo aggiornata con successo!', 'success');
-            })
-            .fail(function() {
-                showToast('Errore durante il caricamento della foto.', 'danger');
-            });
+    // 2. Gestione Upload Avatar (Immediato al cambio file)
+    $('#avatar-file').on('change', function() {
+        if (this.files && this.files[0]) {
+            const formData = new FormData();
+            formData.append('avatar', this.files[0]);
+            
+            // Feedback visivo immediato (opzionale: spinner o opacità)
+            $('#avatar-preview').css('opacity', '0.5');
+
+            ApiService.upload('/users/avatar', formData)
+                .done(function(response) {
+                    const baseUrl = ApiService.BASE_URL || '';
+                    $('#avatar-preview').attr('src', `${baseUrl}${response.avatar_url}`);
+                    showToast('Foto profilo aggiornata con successo!', 'success');
+                })
+                .fail(function() {
+                    showToast('Errore durante il caricamento della foto.', 'danger');
+                })
+                .always(function() {
+                    $('#avatar-preview').css('opacity', '1');
+                });
+        }
     });
 
     // 3. Gestione Salvataggio Profilo (incluso Prezzo)
