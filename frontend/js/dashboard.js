@@ -23,7 +23,7 @@ $(document).ready(function() {
                 greeting = 'Benvenuto/a';
             }
             
-            $('#welcome-message').text(`${greeting}, ${user.name}! (${user.role})`);
+            $('#welcome-message').text(`${greeting}, ${user.name}!`);
 
             // Mostra il pannello corretto in base al ruolo dell'utente
             if (user.role === 'mentor') {
