@@ -1,9 +1,6 @@
 -- Schema MentorMatch (Postgres)
 -- Assumptions: PostgreSQL >= 9.5
 
--- ---------- EXTENSIONS ----------
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 -- ---------- ENUMS ----------
 CREATE TYPE booking_status AS ENUM ('pending','confirmed','canceled','done');
 
@@ -162,20 +159,6 @@ CREATE TABLE messages (
 );
 
 CREATE INDEX idx_messages_to_user ON messages (to_user);
-
--- ---------- SESSIONS / TOKENS (optional) ----------
--- If you opt for refresh tokens or server sessions store:
-CREATE TABLE sessions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  refresh_token TEXT NOT NULL,
-  user_agent TEXT,
-  ip_address INET,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  expires_at TIMESTAMPTZ
-);
-
-CREATE INDEX idx_sessions_user ON sessions (user_id);
 
 -- ---------- AUX: audit trigger for updated_at on users and availabilities ----------
 CREATE OR REPLACE FUNCTION fn_set_updated_at() RETURNS TRIGGER AS $$
