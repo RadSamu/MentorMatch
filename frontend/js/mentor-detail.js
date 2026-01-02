@@ -1,9 +1,11 @@
 $(document).ready(function() {
     const BASE_URL = ApiService.BASE_URL;
     const token = localStorage.getItem('token');
-    const profileSummary = $('#mentor-profile-summary');
-    const availabilityCard = $('#mentor-availability-card');
-    const bioCard = $('#mentor-bio-card');
+    const heroContent = $('#hero-profile-content');
+    const bioContent = $('#mentor-bio-content');
+    const skillsContent = $('#mentor-skills-content');
+    const priceDisplay = $('#mentor-price-display');
+    const slotsContainer = $('#availability-slots');
     let currentUserId;
 
     // 1. Leggi l'ID del mentor dalla URL (es. ...?id=123)
@@ -35,38 +37,43 @@ $(document).ready(function() {
             const rating = parseFloat(mentor.rating_avg).toFixed(1);
             const ratingCount = mentor.rating_count;
             const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : 'https://via.placeholder.com/150';
+            const price = mentor.hourly_rate ? parseFloat(mentor.hourly_rate).toFixed(0) : '0';
 
             // L'icona parte sempre come cuore vuoto ('far'), poi viene aggiornata se è un preferito
-            const heartIcon = token ? `<i class="far fa-heart favorite-btn fs-4" data-mentor-id="${mentor.id}" style="cursor: pointer; position: absolute; top: 15px; right: 20px;"></i>` : '';
+            const heartIcon = token ? `<i class="far fa-heart favorite-btn fs-3 ms-3 text-white" data-mentor-id="${mentor.id}" style="cursor: pointer;"></i>` : '';
 
-            // Popola la card del sommario profilo (sinistra)
-            const summaryHtml = `
-                <div class="card-body text-center">
-                    ${heartIcon}
-                    <img src="${avatarUrl}" class="rounded-circle img-fluid mb-3" alt="Avatar di ${mentor.name}" style="width: 150px; height: 150px; object-fit: cover;">
-                    <h3 class="card-title">${mentor.name} ${mentor.surname}</h3>
-                    <p class="text-muted">${headline}</p>
-                    <p class="h5">⭐ ${rating} <small>(${ratingCount} recensioni)</small></p>
+            // 1. Popola Hero Section
+            const heroHtml = `
+                <div class="profile-hero-avatar-container">
+                    <img src="${avatarUrl}" alt="Avatar di ${mentor.name}">
+                </div>
+                <h1 class="fw-bold mb-1 d-flex justify-content-center align-items-center">
+                    ${mentor.name} ${mentor.surname} ${heartIcon}
+                </h1>
+                <p class="lead opacity-75 mb-2">${headline}</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <span class="badge bg-white text-primary rounded-pill px-3 py-2"><i class="fas fa-star text-warning me-1"></i> ${rating} (${ratingCount} recensioni)</span>
+                    <span class="badge bg-white text-dark rounded-pill px-3 py-2"><i class="fas fa-map-marker-alt text-danger me-1"></i> Online</span>
                 </div>
             `;
-            profileSummary.html(summaryHtml);
+            heroContent.html(heroHtml);
 
-            // Popola la card della biografia (destra)
-            const bioHtml = `
-                <div class="card-body">
-                    <h5 class="card-title">Chi sono</h5>
-                    <p>${bio.replace(/\n/g, '<br>')}</p>
-                </div>
-            `;
-            bioCard.html(bioHtml);
+            // 2. Popola Bio
+            bioContent.text(bio); // Usa .text() per sicurezza XSS, poi CSS gestisce i newlines
 
-            // Prepara la card delle disponibilità
-            availabilityCard.html(`
-                <div class="card-body">
-                    <h5 class="card-title">Prossime Disponibilità</h5>
-                    <div id="availability-slots"><p>Caricamento...</p></div>
-                </div>
-            `);
+            // 3. Popola Skills e Lingue
+            let skillsHtml = `<div class="mb-3"><span class="badge bg-light text-dark border me-2 p-2">${headline}</span></div>`;
+            if (mentor.languages && mentor.languages.length > 0) {
+                skillsHtml += `<div><strong class="text-muted small text-uppercase me-2">Lingue:</strong>`;
+                mentor.languages.forEach(lang => {
+                    skillsHtml += `<span class="badge bg-secondary bg-opacity-10 text-dark me-1">${lang}</span>`;
+                });
+                skillsHtml += `</div>`;
+            }
+            skillsContent.html(skillsHtml);
+
+            // 4. Popola Prezzo Sticky
+            priceDisplay.text(`${price}€`);
 
             // Dopo aver renderizzato il profilo, carichiamo le disponibilità
             loadMentorAvailabilities(mentorId);
@@ -98,26 +105,28 @@ $(document).ready(function() {
 
     // Funzione per caricare e mostrare le disponibilità del mentor
     function loadMentorAvailabilities(mentorId) {
-        const slotsContainer = $('#availability-slots');
-
         ApiService.get(`/availability/mentor/${mentorId}`)
             .done(function(slots) {
                 slotsContainer.empty();
                 if (slots.length === 0) {
-                    slotsContainer.html('<p>Questo mentor non ha disponibilità al momento.</p>');
+                    slotsContainer.html('<p class="text-muted small text-center col-12">Nessuna disponibilità al momento.</p>');
                     return;
                 }
 
                 const slotsHtml = slots.map(slot => {
-                    const startTime = new Date(slot.start_ts).toLocaleString('it-IT', { dateStyle: 'full', timeStyle: 'short' });
-                    // Aggiungiamo un pulsante per ogni slot, ora più compatto
-                    return `<a href="#" class="btn btn-outline-primary mb-2 d-block book-slot-btn" data-slot-id="${slot.id}">${startTime}</a>`;
+                    const dateObj = new Date(slot.start_ts);
+                    const day = dateObj.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+                    const time = dateObj.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                    return `<a href="#" class="slot-btn book-slot-btn" data-slot-id="${slot.id}" title="${day} alle ${time}">
+                                <div class="fw-bold">${day}</div>
+                                <div>${time}</div>
+                            </a>`;
                 }).join('');
 
                 slotsContainer.html(slotsHtml);
             })
             .fail(function() {
-                slotsContainer.html('<p class="text-danger">Impossibile caricare le disponibilità.</p>');
+                slotsContainer.html('<p class="text-danger small text-center col-12">Errore caricamento.</p>');
             });
     }
 
@@ -138,11 +147,14 @@ $(document).ready(function() {
                     reviews.forEach(review => {
                         const reviewDate = new Date(review.created_at).toLocaleDateString('it-IT');
                         const reviewCard = `
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h6 class="card-subtitle mb-2 text-muted">Recensione di ${review.mentee_name} il ${reviewDate}</h6>
-                                    <p class="card-text"><strong>Valutazione: ${'⭐'.repeat(review.rating)}</strong></p>
-                                    <p class="card-text"><em>"${review.comment || 'Nessun commento.'}"</em></p>
+                            <div class="card mb-3 border-0 border-bottom rounded-0">
+                                <div class="card-body px-0">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="fw-bold mb-0">${review.mentee_name}</h6>
+                                        <small class="text-muted">${reviewDate}</small>
+                                    </div>
+                                    <div class="text-warning mb-2 small">${'⭐'.repeat(review.rating)}</div>
+                                    <p class="card-text text-muted">"${review.comment || 'Nessun commento.'}"</p>
                                 </div>
                             </div>
                         `;
