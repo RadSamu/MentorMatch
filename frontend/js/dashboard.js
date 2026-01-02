@@ -16,7 +16,14 @@ $(document).ready(function() {
     ApiService.get('/auth/me')
         .done(function(user) {
             // Se la richiesta ha successo, mostriamo un messaggio di benvenuto
-            $('#welcome-message').text(`Benvenuto, ${user.name}! (${user.role})`);
+            let greeting = 'Benvenuto';
+            if (user.gender === 'female') {
+                greeting = 'Benvenuta';
+            } else if (user.gender === 'other') {
+                greeting = 'Benvenuto/a';
+            }
+            
+            $('#welcome-message').text(`${greeting}, ${user.name}! (${user.role})`);
 
             // Mostra il pannello corretto in base al ruolo dell'utente
             if (user.role === 'mentor') {

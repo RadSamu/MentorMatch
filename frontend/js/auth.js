@@ -9,6 +9,7 @@ $(document).ready(function() {
             surname: $('#surname').val(),
             email: $('#email').val(),
             password: $('#password').val(),
+            gender: $('#gender').val(),
             role: $('input[name="role"]:checked').val()
         };
 
