@@ -97,20 +97,77 @@ body {
 }
 
 /* --- Dashboard Styles --- */
-.dashboard-card {
-    text-align: center;
-    color: var(--dark-text);
+/* Hero Section della Dashboard */
+.dashboard-hero {
+    background: linear-gradient(135deg, #0d6efd 0%, #0043a8 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
 }
 
-.dashboard-card .card-body {
+/* Card Statistiche */
+.stat-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    height: 100%;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.stat-card.border-left-primary { border-left: 5px solid var(--primary-color); }
+.stat-card.border-left-warning { border-left: 5px solid #ffc107; }
+.stat-card.border-left-success { border-left: 5px solid #198754; }
+
+.stat-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+}
+.bg-light-primary { background-color: rgba(13, 110, 253, 0.1); color: var(--primary-color); }
+.bg-light-warning { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
+.bg-light-success { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+
+/* Card Azioni Rapide */
+.action-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+    text-align: center;
+    padding: 1.5rem;
 }
 
-.dashboard-card-icon {
-    font-size: 2.5rem; /* Ridotta leggermente la dimensione per un look più pulito */
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.action-icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    transition: background 0.3s;
+}
+
+.action-card:hover .action-icon-circle {
+    background: rgba(13, 110, 253, 0.1);
+}
+
+.action-card:hover .action-icon-circle i {
+    color: var(--primary-color);
 }
 
 /* --- Stili per le stelle --- */
