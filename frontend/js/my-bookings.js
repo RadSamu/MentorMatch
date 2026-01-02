@@ -40,14 +40,25 @@ $(document).ready(function() {
         const pastBookings = bookings.filter(b => new Date(b.start_ts) <= now || b.status === 'canceled');
 
         if (futureBookings.length === 0) {
-            futureBookingsList.html(`
-                <div class="text-center py-5 bg-light rounded">
-                    <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">Nessuna prenotazione futura</h5>
-                    <p class="text-muted">Prenota la tua prossima sessione per iniziare.</p>
-                    <a href="/mentors.html" class="btn btn-outline-primary mt-2">Cerca Mentor</a>
-                </div>
-            `);
+            if (currentUser.role === 'mentor') {
+                futureBookingsList.html(`
+                    <div class="text-center py-5 bg-light rounded">
+                        <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Nessuna prenotazione in arrivo</h5>
+                        <p class="text-muted">Non hai ancora ricevuto prenotazioni. Assicurati di aver inserito le tue disponibilità.</p>
+                        <a href="/availability.html" class="btn btn-outline-primary mt-2">Gestisci Disponibilità</a>
+                    </div>
+                `);
+            } else {
+                futureBookingsList.html(`
+                    <div class="text-center py-5 bg-light rounded">
+                        <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Nessuna prenotazione futura</h5>
+                        <p class="text-muted">Prenota la tua prossima sessione per iniziare.</p>
+                        <a href="/mentors.html" class="btn btn-outline-primary mt-2">Cerca Mentor</a>
+                    </div>
+                `);
+            }
         }
         if (pastBookings.length === 0) {
             pastBookingsList.html(`
@@ -91,13 +102,17 @@ $(document).ready(function() {
             }
         } else if (booking.status === 'pending') {
             statusBadge = `<span class="badge bg-warning text-dark">In Attesa di Pagamento</span>`;
-            actionButton = `<button class="btn btn-sm btn-warning pay-now-btn me-2" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#paymentModal"
-                                data-booking-id="${booking.id}"
-                                data-price="${booking.price}">
-                                Paga Ora (${booking.price}€)
-                             </button>`;
+            if (currentUser.role === 'mentee') {
+                actionButton = `<button class="btn btn-sm btn-warning pay-now-btn me-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#paymentModal"
+                                    data-booking-id="${booking.id}"
+                                    data-price="${booking.price}">
+                                    Paga Ora (${booking.price}€)
+                                 </button>`;
+            } else {
+                actionButton = '';
+            }
             const cancelButton = `<button class="btn btn-sm btn-outline-danger cancel-booking-btn" data-booking-id="${booking.id}">Annulla</button>`;
             actionButton += cancelButton;
         } else {
