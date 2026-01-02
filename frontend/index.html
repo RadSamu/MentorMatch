@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <title>Benvenuto in MentorMatch</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -14,42 +15,163 @@
 
     <!-- Hero Section -->
     <header class="hero-section text-white text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Trova il Mentor Perfetto per Te</h1>
-            <p class="lead my-4">Accelera la tua carriera con la guida di professionisti esperti. Inizia oggi il tuo percorso di crescita.</p>
-            <div>
-                <a href="/register.html" class="btn btn-primary btn-lg me-2" type="button">Iscriviti Ora</a>
-                <a href="/login.html" class="btn btn-outline-light btn-lg" type="button">Accedi</a>
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bold mb-4">Sblocca il tuo Potenziale</h1>
+                    <p class="lead mb-5 opacity-75">Trova il mentor perfetto per guidarti verso il successo professionale. Prenota sessioni 1-to-1 con esperti del settore e accelera la tua carriera.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="/register.html" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-primary shadow">Inizia Ora</a>
+                        <a href="#how-it-works" class="btn btn-outline-light btn-lg rounded-pill px-5">Scopri di più</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Sezione "Come Funziona" -->
-    <section class="how-it-works-section py-5">
+    <!-- Statistiche (Social Proof) -->
+    <section class="py-4 bg-dark text-white shadow">
         <div class="container">
-            <h2 class="text-center mb-5">Come Funziona</h2>
             <div class="row text-center">
                 <div class="col-md-4">
-                    <div class="step-icon mb-3">🔍</div>
-                    <h3>1. Trova</h3>
-                    <p>Cerca tra centinaia di mentor esperti nel tuo settore e trova quello più adatto alle tue esigenze.</p>
+                    <h3 class="fw-bold mb-0">500+</h3>
+                    <small class="text-white-50">Mentor Esperti</small>
+                </div>
+                <div class="col-md-4 border-start border-end border-secondary">
+                    <h3 class="fw-bold mb-0">2.000+</h3>
+                    <small class="text-white-50">Sessioni Completate</small>
                 </div>
                 <div class="col-md-4">
-                    <div class="step-icon mb-3">📅</div>
-                    <h3>2. Prenota</h3>
-                    <p>Controlla le disponibilità del mentor e prenota una sessione nell'orario che preferisci con un semplice click.</p>
-                </div>
-                <div class="col-md-4">
-                    <div class="step-icon mb-3">🚀</div>
-                    <h3>3. Cresci</h3>
-                    <p>Incontra il tuo mentor, ricevi consigli pratici e accelera il tuo sviluppo professionale e personale.</p>
+                    <h3 class="fw-bold mb-0">4.9/5</h3>
+                    <small class="text-white-50">Valutazione Media</small>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="container text-center mt-5">
-    </div>
+    <!-- Sezione "Come Funziona" -->
+    <section id="how-it-works" class="how-it-works-section py-5 bg-light">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Come Funziona</h2>
+                <p class="text-muted">Il tuo percorso di crescita in 3 semplici passi</p>
+            </div>
+            <div class="row g-4 text-center">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="step-icon mb-3"><i class="fas fa-search"></i></div>
+                        <h3>1. Trova</h3>
+                        <p class="text-muted">Filtra per competenze e settore. Leggi le recensioni e trova il professionista perfetto per te.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="step-icon mb-3"><i class="fas fa-calendar-check"></i></div>
+                        <h3>2. Prenota</h3>
+                        <p class="text-muted">Scegli uno slot disponibile dal calendario del mentor e prenota la tua sessione in pochi click.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="step-icon mb-3"><i class="fas fa-rocket"></i></div>
+                        <h3>3. Cresci</h3>
+                        <p class="text-muted">Partecipa alla videochiamata, ricevi feedback personalizzati e raggiungi i tuoi obiettivi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vetrina Mentor (Anteprima) -->
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">I Nostri Mentor in Evidenza</h2>
+                <p class="text-muted">Impara dai migliori professionisti del settore</p>
+            </div>
+            <div class="row g-4">
+                <!-- Mentor 1 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center p-3">
+                        <div class="card-body">
+                            <img src="https://i.pravatar.cc/150?img=68" class="rounded-circle mb-3" width="100" height="100" alt="Mentor">
+                            <h5 class="card-title fw-bold">Marco Rossi</h5>
+                            <p class="text-primary mb-2">Senior Software Engineer</p>
+                            <p class="text-muted small">"Aiuto sviluppatori junior a diventare senior. Esperto in React e Node.js."</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mentor 2 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center p-3">
+                        <div class="card-body">
+                            <img src="https://i.pravatar.cc/150?img=44" class="rounded-circle mb-3" width="100" height="100" alt="Mentor">
+                            <h5 class="card-title fw-bold">Giulia Bianchi</h5>
+                            <p class="text-primary mb-2">Product Manager</p>
+                            <p class="text-muted small">"Trasforma le tue idee in prodotti di successo. Strategia, roadmap e UX."</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mentor 3 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center p-3">
+                        <div class="card-body">
+                            <img src="https://i.pravatar.cc/150?img=12" class="rounded-circle mb-3" width="100" height="100" alt="Mentor">
+                            <h5 class="card-title fw-bold">Luca Verdi</h5>
+                            <p class="text-primary mb-2">Data Scientist</p>
+                            <p class="text-muted small">"Scopri il potere dei dati. Python, Machine Learning e AI per il business."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="/register.html" class="btn btn-primary btn-lg rounded-pill px-5">Vedi tutti i Mentor</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-graduation-cap me-2"></i>MentorMatch</h5>
+                    <p class="text-white-50 small">La piattaforma che connette ambizione ed esperienza. Trova il tuo mentor oggi stesso e inizia a costruire il tuo futuro.</p>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="fw-bold mb-3">Link Rapidi</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="/" class="text-white-50 text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="/login.html" class="text-white-50 text-decoration-none">Accedi</a></li>
+                        <li class="mb-2"><a href="/register.html" class="text-white-50 text-decoration-none">Registrati</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="fw-bold mb-3">Legale</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Termini di Servizio</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3">Contattaci</h6>
+                    <p class="text-white-50 small mb-2"><i class="fas fa-envelope me-2"></i> info@mentormatch.com</p>
+                    <p class="text-white-50 small mb-2"><i class="fas fa-phone me-2"></i> +39 02 12345678</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="text-center text-white-50 small">
+                &copy; 2023 MentorMatch. Tutti i diritti riservati.
+            </div>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
