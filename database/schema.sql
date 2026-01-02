@@ -9,6 +9,7 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   role VARCHAR(10) NOT NULL CHECK (role IN ('mentor','mentee','admin')),
   email VARCHAR(255) UNIQUE NOT NULL,
+  gender VARCHAR(10) CHECK (gender IN ('male', 'female', 'other')),
   password_hash VARCHAR(255) NOT NULL,
   name VARCHAR(100) NOT NULL,
   surname VARCHAR(100),
