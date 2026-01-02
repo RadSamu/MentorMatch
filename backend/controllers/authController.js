@@ -5,10 +5,10 @@ const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 
 exports.register = async (req, res) => {
-  const { name, surname, email, password, role } = req.body;
+  const { name, surname, email, password, role, gender } = req.body;
 
   // 1. Validazione di base dei dati ricevuti
-  if (!name || !surname || !email || !password || !role) {
+  if (!name || !surname || !email || !password || !role || !gender) {
     return res.status(400).json({ msg: 'Per favore, inserisci tutti i campi.' });
   }
 
@@ -29,8 +29,8 @@ exports.register = async (req, res) => {
 
     // 4. Inserisci il nuovo utente nel database
     const newUser = await pool.query(
-      'INSERT INTO users (name, surname, email, password_hash, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role',
-      [name, surname, email, hashedPassword, role]
+      'INSERT INTO users (name, surname, email, password_hash, role, gender) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, name, email, role',
+      [name, surname, email, hashedPassword, role, gender]
     );
 
     // 5. Genera il Token JWT (Logica allineata con i test)
@@ -108,7 +108,7 @@ exports.getMe = async (req, res) => {
     // Grazie al middleware, abbiamo req.user.id
     // Selezioniamo i dati dell'utente dal DB senza la password
     const user = await pool.query(
-      'SELECT id, name, surname, email, role, avatar_url, sector, bio, languages, hourly_rate FROM users WHERE id = $1',
+      'SELECT id, name, surname, email, role, gender, avatar_url, sector, bio, languages, hourly_rate FROM users WHERE id = $1',
       [req.user.id]
     );
 
