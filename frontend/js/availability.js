@@ -2,6 +2,10 @@ $(document).ready(function() {
     const token = localStorage.getItem('token');
     const calendarEl = document.getElementById('calendar');
 
+    // Variabili per gestire lo stato dei modali
+    let selectedStartDate = null;
+    let selectedEventId = null;
+
     // Protezione della pagina
     if (!token) {
         window.location.href = '/login.html';
@@ -14,7 +18,7 @@ $(document).ready(function() {
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'timeGridWeek,timeGridDay' // Rimosso dayGridMonth per focus su orari
         },
         locale: 'it', // Lingua italiana
         slotMinTime: '08:00:00', // Orario di inizio visualizzato
@@ -46,56 +50,82 @@ $(document).ready(function() {
         // Gestione del click su una data/ora per AGGIUNGERE uno slot
         select: function(selectionInfo) {
             const startTime = selectionInfo.start;
+            
             if (startTime < new Date()) {
                 showAlert('Non puoi aggiungere disponibilità nel passato.', 'warning');
                 calendar.unselect();
                 return;
             }
 
-            const meetingLink = prompt("Vuoi aggiungere un link per la videochiamata (es. Zoom, Meet)? Lascia vuoto se non necessario.", "https://meet.google.com/");
-
-            // Se l'utente clicca "Annulla" sul prompt, non fare nulla
-            if (meetingLink === null) return;
-
-            if (confirm(`Confermi di voler aggiungere uno slot per le ${startTime.toLocaleTimeString('it-IT', {timeStyle: 'short'})}?`)) {
-                ApiService.post('/availability', { start_time: startTime.toISOString(), meeting_link: meetingLink })
-                    .done(function() {
-                        showAlert('Disponibilità aggiunta con successo!', 'success');
-                        calendar.refetchEvents(); // Ricarica gli eventi sul calendario
-                    })
-                    .fail(function(xhr) {
-                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore.';
-                        showAlert(`Impossibile aggiungere la disponibilità. ${errorMsg}`, 'danger');
-                    });
-            }
-            calendar.unselect();
+            // 1. Salva la data selezionata
+            selectedStartDate = startTime;
+            
+            // 2. Aggiorna il testo nel modale
+            const dateStr = startTime.toLocaleString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+            $('#slot-date-display').text(dateStr);
+            
+            // 3. Apri il modale
+            const addModal = new bootstrap.Modal(document.getElementById('addSlotModal'));
+            addModal.show();
         },
 
-        // Gestione del click su un evento per RIMUOVERLO
+        // Gestione del click su un evento per VEDERE DETTAGLI o RIMUOVERE
         eventClick: function(clickInfo) {
             const event = clickInfo.event;
-            // Permetti la cancellazione solo se lo slot non è prenotato
-            if (event.extendedProps.editable === false || event.backgroundColor === '#6c757d') {
-                showAlert('Non puoi rimuovere uno slot già prenotato.', 'warning');
-                return;
+            selectedEventId = event.id;
+            
+            const isBooked = !event.extendedProps.editable;
+            const timeStr = event.start.toLocaleString('it-IT', { weekday: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            let contentHtml = `<p><strong>Orario:</strong> ${timeStr}</p>`;
+            
+            if (isBooked) {
+                contentHtml += `<div class="alert alert-warning"><i class="fas fa-lock"></i> Questo slot è stato prenotato da un mentee.</div>`;
+                $('#delete-slot-btn').hide(); // Nascondi bottone elimina
+            } else {
+                contentHtml += `<div class="alert alert-success"><i class="fas fa-check-circle"></i> Slot disponibile.</div>`;
+                $('#delete-slot-btn').show(); // Mostra bottone elimina
             }
 
-            if (confirm(`Sei sicuro di voler rimuovere lo slot delle ${event.start.toLocaleTimeString('it-IT', {timeStyle: 'short'})}?`)) {
-                ApiService.delete(`/availability/${event.id}`)
-                    .done(function() {
-                        showAlert('Slot eliminato con successo.', 'success');
-                        calendar.refetchEvents(); // Ricarica gli eventi
-                    })
-                    .fail(function(xhr) {
-                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore.';
-                        showAlert(`Impossibile eliminare lo slot. ${errorMsg}`, 'danger');
-                    });
-            }
+            $('#event-details-content').html(contentHtml);
+            
+            const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+            eventModal.show();
         }
     });
 
     // Renderizza il calendario
     calendar.render();
+
+    // --- Gestione Azioni Modali ---
+
+    // 1. Salva Nuovo Slot
+    $('#save-slot-btn').click(function() {
+        const meetingLink = $('#meeting-link').val();
+        
+        ApiService.post('/availability', { start_time: selectedStartDate.toISOString(), meeting_link: meetingLink })
+            .done(function() {
+                showAlert('Disponibilità aggiunta con successo!', 'success');
+                calendar.refetchEvents();
+                bootstrap.Modal.getInstance(document.getElementById('addSlotModal')).hide();
+            })
+            .fail(function(xhr) {
+                showAlert(`Errore: ${xhr.responseJSON?.msg || 'Impossibile aggiungere.'}`, 'danger');
+            });
+    });
+
+    // 2. Elimina Slot
+    $('#delete-slot-btn').click(function() {
+        ApiService.delete(`/availability/${selectedEventId}`)
+            .done(function() {
+                showAlert('Slot eliminato con successo.', 'success');
+                calendar.refetchEvents();
+                bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+            })
+            .fail(function(xhr) {
+                showAlert(`Errore: ${xhr.responseJSON?.msg || 'Impossibile eliminare.'}`, 'danger');
+            });
+    });
 
     // Funzione helper per mostrare alert
     function showAlert(message, type) {

@@ -14,16 +14,69 @@
     <!-- La nostra navbar riutilizzabile -->
     <div id="navbar-placeholder"></div>
 
-    <div class="container my-5">
-        <div class="text-center mb-4">
-            <h2>Gestisci le tue Disponibilità</h2>
-            <p class="lead">Clicca su una data per aggiungere un nuovo slot di 1 ora. Clicca su uno slot blu per rimuoverlo.</p>
+    <!-- Header Sfumato -->
+    <div class="profile-header text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-2">Gestisci Disponibilità</h2>
+            <p class="opacity-75">Organizza il tuo calendario e permetti ai mentee di prenotare sessioni con te.</p>
         </div>
+    </div>
+
+    <div class="container pb-5">
         <div id="alert-placeholder"></div>
-        <div class="card">
-            <div class="card-body">
+        
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4">
+                <div class="alert alert-light border-start border-primary border-4 mb-4" role="alert">
+                    <i class="fas fa-info-circle text-primary me-2"></i>
+                    <strong>Come fare:</strong> Clicca o trascina sul calendario per creare uno slot. Clicca su uno slot esistente per vedere i dettagli o eliminarlo.
+                </div>
                 <!-- Il calendario verrà renderizzato qui -->
                 <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Aggiungi Slot -->
+    <div class="modal fade" id="addSlotModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Nuova Disponibilità</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Stai aggiungendo uno slot per: <strong id="slot-date-display" class="text-dark"></strong></p>
+                    <form id="add-slot-form">
+                        <div class="form-floating mb-3">
+                            <input type="url" class="form-control" id="meeting-link" placeholder="https://meet.google.com/..." value="https://meet.google.com/">
+                            <label for="meeting-link">Link Videochiamata (es. Google Meet)</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" id="save-slot-btn">Salva Disponibilità</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Dettagli/Elimina Slot -->
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Dettagli Slot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="event-details-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-danger" id="delete-slot-btn">Elimina Slot</button>
+                </div>
             </div>
         </div>
     </div>

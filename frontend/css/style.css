@@ -244,3 +244,21 @@ body {
 .profile-avatar-wrapper:hover .profile-avatar-overlay {
     opacity: 1;
 }
+
+/* --- Calendar Styles --- */
+.fc-event {
+    border: none !important;
+    border-radius: 8px !important; /* Effetto pillola */
+    padding: 4px 8px !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 0.9rem;
+}
+.fc-toolbar-title {
+    font-weight: 700 !important;
+    color: var(--dark-text);
+}
+.fc-button-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    text-transform: capitalize;
+}
