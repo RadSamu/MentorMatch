@@ -7,6 +7,8 @@ $(document).ready(function() {
     let currentSector = '';
     let currentLanguage = '';
     let currentRating = '';
+    let currentMinPrice = '';
+    let currentMaxPrice = '';
     let favoriteMentorIds = [];
 
     // Funzione per caricare gli ID dei mentor preferiti
@@ -24,11 +26,13 @@ $(document).ready(function() {
     }
 
     // Funzione per caricare e mostrare i mentor
-    function loadMentors(searchTerm = '', sector = '', language = '', rating = '', page = 1) {
+    function loadMentors(searchTerm = '', sector = '', language = '', rating = '', minPrice = '', maxPrice = '', page = 1) {
         currentSearchTerm = searchTerm;
         currentSector = sector;
         currentLanguage = language;
         currentRating = rating;
+        currentMinPrice = minPrice;
+        currentMaxPrice = maxPrice;
         currentPage = page;
 
         let url = `/mentors?page=${page}&limit=9`;
@@ -44,6 +48,12 @@ $(document).ready(function() {
         if (rating) {
             url += `&min_rating=${rating}`;
         }
+        if (minPrice) {
+            url += `&min_price=${minPrice}`;
+        }
+        if (maxPrice) {
+            url += `&max_price=${maxPrice}`;
+        }
 
         ApiService.get(url)
             .done(function(response) {
@@ -52,7 +62,13 @@ $(document).ready(function() {
                 mentorsList.empty(); // Svuota il messaggio di caricamento
 
                 if (mentors.length === 0) {
-                    mentorsList.html('<div class="col"><p class="alert alert-info">Nessun mentor trovato con i criteri di ricerca specificati.</p></div>');
+                    mentorsList.html(`
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3 opacity-50"></i>
+                            <h5 class="text-muted">Nessun mentor trovato</h5>
+                            <p class="text-muted small">Prova a modificare i filtri di ricerca.</p>
+                        </div>
+                    `);
                     renderPagination(null); // Nasconde la paginazione
                     return;
                 }
@@ -66,19 +82,35 @@ $(document).ready(function() {
                     const isFavorite = favoriteMentorIds.includes(mentor.id);
                     const heartClass = isFavorite ? 'fas favorited' : 'far'; // 'fas' per pieno, 'far' per vuoto
                     const heartIcon = token ? `<i class="${heartClass} fa-heart favorite-btn" data-mentor-id="${mentor.id}"></i>` : '';
+                    
+                    // Badge prezzo
+                    const priceBadge = mentor.hourly_rate 
+                        ? `<div class="mentor-price-badge">${parseFloat(mentor.hourly_rate).toFixed(0)}€/h</div>` 
+                        : `<div class="mentor-price-badge">Gratis</div>`;
+
+                    // Rating
+                    const ratingHtml = mentor.rating_avg 
+                        ? `<span class="text-warning fw-bold"><i class="fas fa-star"></i> ${mentor.rating_avg}</span> <small class="text-muted">(${mentor.rating_count || 0})</small>`
+                        : `<span class="text-muted small">Nuovo</span>`;
 
                     const mentorCard = `
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 position-relative">
-                                <img src="${avatarUrl}" class="card-img-top" alt="Avatar di ${mentor.name}">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <h5 class="card-title">${mentor.name} ${mentor.surname}</h5>
-                                        ${heartIcon}
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card mentor-card h-100">
+                                <div class="mentor-card-header">
+                                    ${priceBadge}
+                                    <div class="mentor-avatar-container">
+                                        <img src="${avatarUrl}" alt="${mentor.name}">
                                     </div>
-                                    <h6 class="card-subtitle mb-2 text-muted">${headline}</h6>
-                                    <p class="card-text">${bioSnippet}</p>
-                                    <a href="/mentor-detail.html?id=${mentor.id}" class="btn btn-primary">Vedi Profilo Completo</a>
+                                </div>
+                                <div class="mentor-card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="fw-bold mb-0">${mentor.name} ${mentor.surname}</h5>
+                                        <div class="fs-5 text-danger" style="cursor:pointer;">${heartIcon}</div>
+                                    </div>
+                                    <p class="text-primary small mb-2 fw-bold text-uppercase">${headline}</p>
+                                    <div class="mb-3">${ratingHtml}</div>
+                                    <p class="card-text text-muted small mb-4" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${bioSnippet}</p>
+                                    <a href="/mentor-detail.html?id=${mentor.id}" class="btn btn-outline-primary w-100 rounded-pill">Vedi Profilo</a>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +177,9 @@ $(document).ready(function() {
         const sector = $('#sector-filter').val();
         const language = $('#language-filter').val();
         const rating = $('#rating-filter').val();
-        loadMentors(searchTerm, sector, language, rating, 1); // Torna alla prima pagina quando si applica un filtro
+        const minPrice = $('#min-price').val();
+        const maxPrice = $('#max-price').val();
+        loadMentors(searchTerm, sector, language, rating, minPrice, maxPrice, 1); // Torna alla prima pagina
     }
 
     // Gestione del form di ricerca (sia per submit che per cambio filtri)
@@ -155,7 +189,7 @@ $(document).ready(function() {
     });
 
     // Ricarica i risultati quando si cambia il settore o si scrive nella barra di ricerca
-    $('#sector-filter, #language-filter, #rating-filter').on('change', triggerSearch);
+    $('#sector-filter, #language-filter, #rating-filter, #min-price, #max-price').on('change', triggerSearch);
     $('#search-input').on('keyup', triggerSearch);
 
     // Gestione dei click sulla paginazione
@@ -163,7 +197,7 @@ $(document).ready(function() {
         event.preventDefault();
         const page = $(this).data('page');
         if (page) {
-            loadMentors(currentSearchTerm, currentSector, currentLanguage, currentRating, page);
+            loadMentors(currentSearchTerm, currentSector, currentLanguage, currentRating, currentMinPrice, currentMaxPrice, page);
         }
     });
 

@@ -12,59 +12,81 @@
     <!-- La nostra navbar riutilizzabile -->
     <div id="navbar-placeholder"></div>
 
-    <header class="page-header text-center py-5">
+    <!-- Header Sfumato -->
+    <div class="profile-header text-center">
         <div class="container">
-            <h1 class="display-5 fw-bold">Trova il tuo Mentor</h1>
-            <p class="lead">Esplora i profili dei nostri esperti e trova la guida perfetta per il tuo percorso.</p>
+            <h2 class="fw-bold mb-2">Trova il tuo Mentor</h2>
+            <p class="opacity-75">Esplora i profili dei nostri esperti e trova la guida perfetta per il tuo percorso.</p>
         </div>
-    </header>
+    </div>
 
-    <div class="container mt-4">
-        <!-- Barra di ricerca e filtri -->
-        <form id="filter-form" class="mb-4 p-3 bg-light rounded">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-6">
-                    <label for="search-input" class="visually-hidden">Cerca per nome</label>
-                    <input type="text" id="search-input" class="form-control" placeholder="Cerca per nome, cognome o parola chiave...">
-                </div>
-                <div class="col-md-3">
-                    <label for="sector-filter" class="visually-hidden">Filtra per settore</label>
-                    <select id="sector-filter" class="form-select">
-                        <option value="">Tutti i settori</option>
-                        <!-- Le opzioni verranno popolate dinamicamente -->
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="language-filter" class="visually-hidden">Filtra per lingua</label>
-                    <select id="language-filter" class="form-select">
-                        <option value="">Tutte le lingue</option>
-                        <!-- Le opzioni verranno popolate dinamicamente -->
-                    </select>
-                </div>
-                <div class="col-md-12 mt-3">
-                    <label for="rating-filter" class="form-label">Valutazione minima:</label>
-                    <select id="rating-filter" class="form-select" style="width: auto;">
-                        <option value="">Qualsiasi</option>
-                        <option value="4">⭐ 4 e più</option>
-                        <option value="3">⭐ 3 e più</option>
-                        <option value="2">⭐ 2 e più</option>
-                        <option value="1">⭐ 1 e più</option>
-                    </select>
+    <div class="container pb-5">
+        <div class="row">
+            <!-- Sidebar Filtri -->
+            <div class="col-lg-3 mb-4">
+                <div class="card border-0 shadow-sm p-3 filter-sidebar rounded-4">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-filter me-2 text-primary"></i>Filtri</h5>
+                    <form id="filter-form">
+                        <div class="mb-3">
+                            <label for="search-input" class="form-label small fw-bold text-muted">Cerca</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" id="search-input" class="form-control bg-light border-start-0" placeholder="Nome o keyword...">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="sector-filter" class="form-label small fw-bold text-muted">Settore</label>
+                            <select id="sector-filter" class="form-select bg-light">
+                                <option value="">Tutti i settori</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="language-filter" class="form-label small fw-bold text-muted">Lingua</label>
+                            <select id="language-filter" class="form-select bg-light">
+                                <option value="">Tutte le lingue</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Prezzo Orario</label>
+                            <div class="d-flex gap-2">
+                                <input type="number" id="min-price" class="form-control bg-light" placeholder="Min" min="0">
+                                <input type="number" id="max-price" class="form-control bg-light" placeholder="Max" min="0">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="rating-filter" class="form-label small fw-bold text-muted">Valutazione</label>
+                            <select id="rating-filter" class="form-select bg-light">
+                                <option value="">Qualsiasi</option>
+                                <option value="4">⭐⭐⭐⭐ 4+ Stelle</option>
+                                <option value="3">⭐⭐⭐ 3+ Stelle</option>
+                            </select>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-secondary w-100 rounded-pill btn-sm" onclick="window.location.reload()">Resetta Filtri</button>
+                    </form>
                 </div>
             </div>
-        </form>
-        
-        
-        <div class="row" id="mentors-list">
-            <!-- Le card dei mentor verranno inserite qui da JavaScript -->
-            <p>Caricamento mentor in corso...</p>
-        </div>
 
-        <!-- Controlli di Paginazione -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center" id="pagination-controls">
-            </ul>
-        </nav>
+            <!-- Lista Risultati -->
+            <div class="col-lg-9">
+                <div class="row g-4" id="mentors-list">
+                    <!-- Le card dei mentor verranno inserite qui da JavaScript -->
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2 text-muted">Caricamento mentor...</p>
+                    </div>
+                </div>
+
+                <!-- Paginazione -->
+                <nav aria-label="Page navigation" class="mt-5">
+                    <ul class="pagination justify-content-center" id="pagination-controls"></ul>
+                </nav>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
