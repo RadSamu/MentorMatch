@@ -85,17 +85,24 @@ $(document).ready(function() {
             // L'utente è loggato: mostra i link della dashboard/logout e nascondi login/register
             $('#nav-login').hide();
             $('#nav-register').hide();
-            $('#nav-dashboard').show();
             $('#nav-notifications').css('display', 'block'); // Mostra la campanella
-            $('#nav-logout').show();
             loadNotifications(token); // Carica le notifiche
+
+            // Carica i dati utente per la navbar
+            ApiService.get('/auth/me').done(function(user) {
+                const avatarUrl = user.avatar_url ? `${ApiService.BASE_URL}${user.avatar_url}` : 'https://via.placeholder.com/40';
+                $('#nav-user-name').text(user.name);
+                $('#nav-user-email').text(user.email);
+                $('#nav-user-avatar').attr('src', avatarUrl);
+                
+                $('#nav-user-dropdown').show(); // Mostra il dropdown utente
+            });
         } else {
             // L'utente non è loggato: stato di default (login/register visibili)
             $('#nav-notifications').hide();
             $('#nav-login').show();
             $('#nav-register').show();
-            $('#nav-dashboard').hide();
-            $('#nav-logout').hide();
+            $('#nav-user-dropdown').hide();
         }
 
 

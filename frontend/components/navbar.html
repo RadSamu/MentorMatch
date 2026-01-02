@@ -1,36 +1,53 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">MentorMatch</a>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-glass">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-graduation-cap me-2"></i>MentorMatch</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <!-- Creeremo questa pagina più avanti -->
                     <a class="nav-link" href="/mentors.html">Trova un Mentor</a>
                 </li>
             </ul>
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <!-- Voci per utenti non loggati (visibili di default) -->
                 <li class="nav-item" id="nav-login"><a class="nav-link" href="/login.html">Login</a></li>
-                <li class="nav-item" id="nav-register"><a class="nav-link" href="/register.html">Registrati</a></li>
+                <li class="nav-item" id="nav-register">
+                    <a class="nav-link btn btn-primary text-white px-4 ms-2 rounded-pill" href="/register.html" style="color: white !important;">Registrati</a>
+                </li>
 
                 <!-- Voci per utenti loggati (nascoste di default) -->
-                <li class="nav-item" id="nav-dashboard" style="display: none;"><a class="nav-link" href="/dashboard.html">Dashboard</a></li>
                 <!-- Dropdown Notifiche (per utenti loggati) -->
                 <li class="nav-item dropdown" id="nav-notifications" style="display: none;">
-                    <a class="nav-link position-relative" href="#" id="notification-bell" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
+                    <a class="nav-link position-relative px-3" href="#" id="notification-bell" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-count" style="display: none;">
                             <span class="visually-hidden">unread messages</span>
                         </span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification-bell" id="notification-list">
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass" aria-labelledby="notification-bell" id="notification-list">
                         <!-- Le notifiche verranno inserite qui da JS -->
                     </ul>
                 </li>
-                <li class="nav-item" id="nav-logout" style="display: none;"><a class="nav-link" href="#" id="logout-button">Logout</a></li>
+                
+                <!-- Dropdown Utente Pro (per utenti loggati) -->
+                <li class="nav-item dropdown ms-3" id="nav-user-dropdown" style="display: none;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://via.placeholder.com/40" id="nav-user-avatar" class="rounded-circle nav-user-avatar me-2" width="40" height="40">
+                        <span id="nav-user-name" class="fw-bold">User</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass p-3" aria-labelledby="userDropdown">
+                        <li><h6 class="dropdown-header px-0" id="nav-user-email">email@example.com</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/dashboard.html"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/profile.html"><i class="fas fa-user-edit me-2 text-primary"></i>Profilo</a></li>
+                        <li><a class="dropdown-item" href="/my-bookings.html"><i class="fas fa-calendar-check me-2 text-primary"></i>Prenotazioni</a></li>
+                        <li><a class="dropdown-item" href="/messages.html"><i class="fas fa-envelope me-2 text-primary"></i>Messaggi</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logout-button"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
