@@ -1,8 +1,9 @@
 $(document).ready(function() {
     const BASE_URL = ApiService.BASE_URL;
     const token = localStorage.getItem('token');
-    const futureBookingsList = $('#future-bookings-list');
-    const pastBookingsList = $('#past-bookings-list');
+    const upcomingList = $('#pills-upcoming');
+    const completedList = $('#pills-completed');
+    const canceledList = $('#pills-canceled');
     let currentUser; // Per memorizzare i dati dell'utente loggato
 
     // Protezione della pagina
@@ -32,50 +33,74 @@ $(document).ready(function() {
     }
 
     function renderBookings(bookings) {
-        futureBookingsList.empty();
-        pastBookingsList.empty();
+        upcomingList.empty();
+        completedList.empty();
+        canceledList.empty();
 
         const now = new Date();
-        const futureBookings = bookings.filter(b => new Date(b.start_ts) > now && b.status !== 'canceled');
-        const pastBookings = bookings.filter(b => new Date(b.start_ts) <= now || b.status === 'canceled');
+        
+        // Filtra le prenotazioni
+        const upcoming = bookings.filter(b => new Date(b.start_ts) > now && b.status !== 'canceled');
+        const completed = bookings.filter(b => new Date(b.start_ts) <= now && b.status !== 'canceled');
+        const canceled = bookings.filter(b => b.status === 'canceled');
 
-        if (futureBookings.length === 0) {
+        // Renderizza In Arrivo
+        if (upcoming.length === 0) {
             if (currentUser.role === 'mentor') {
-                futureBookingsList.html(`
-                    <div class="text-center py-5 bg-light rounded">
+                upcomingList.html(`
+                    <div class="text-center py-5">
                         <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">Nessuna prenotazione in arrivo</h5>
                         <p class="text-muted">Non hai ancora ricevuto prenotazioni. Assicurati di aver inserito le tue disponibilità.</p>
-                        <a href="/availability.html" class="btn btn-outline-primary mt-2">Gestisci Disponibilità</a>
+                        <a href="/availability.html" class="btn btn-primary rounded-pill px-4 mt-2">Gestisci Disponibilità</a>
                     </div>
                 `);
             } else {
-                futureBookingsList.html(`
-                    <div class="text-center py-5 bg-light rounded">
+                upcomingList.html(`
+                    <div class="text-center py-5">
                         <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">Nessuna prenotazione futura</h5>
                         <p class="text-muted">Prenota la tua prossima sessione per iniziare.</p>
-                        <a href="/mentors.html" class="btn btn-outline-primary mt-2">Cerca Mentor</a>
+                        <a href="/mentors.html" class="btn btn-primary rounded-pill px-4 mt-2">Cerca Mentor</a>
                     </div>
                 `);
             }
+        } else {
+            upcoming.forEach(b => upcomingList.append(createBookingCard(b)));
         }
-        if (pastBookings.length === 0) {
-            pastBookingsList.html(`
-                <div class="text-center py-5 bg-light rounded">
+
+        // Renderizza Completate
+        if (completed.length === 0) {
+            completedList.html(`
+                <div class="text-center py-5">
                     <i class="fas fa-history fa-3x text-muted mb-3"></i>
                     <h5 class="text-muted">Nessuna prenotazione passata</h5>
                     <p class="text-muted">Qui troverai lo storico delle tue sessioni completate.</p>
                 </div>
             `);
+        } else {
+            completed.forEach(b => completedList.append(createBookingCard(b)));
         }
 
-        futureBookings.forEach(b => futureBookingsList.append(createBookingCard(b)));
-        pastBookings.forEach(b => pastBookingsList.append(createBookingCard(b)));
+        // Renderizza Cancellate
+        if (canceled.length === 0) {
+            canceledList.html(`
+                <div class="text-center py-5">
+                    <i class="fas fa-ban fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Nessuna prenotazione cancellata</h5>
+                </div>
+            `);
+        } else {
+            canceled.forEach(b => canceledList.append(createBookingCard(b)));
+        }
     }
 
     function createBookingCard(booking) {
-        const startTime = new Date(booking.start_ts).toLocaleString('it-IT', { dateStyle: 'full', timeStyle: 'short' });
+        const dateObj = new Date(booking.start_ts);
+        const day = dateObj.getDate();
+        const month = dateObj.toLocaleString('it-IT', { month: 'short' }).toUpperCase();
+        const time = dateObj.toLocaleString('it-IT', { hour: '2-digit', minute: '2-digit' });
+        
         const isPast = new Date(booking.start_ts) <= new Date();
         const isCanceled = booking.status === 'canceled';
 
@@ -91,19 +116,19 @@ $(document).ready(function() {
 
         let statusBadge, actionButton;
         if (isCanceled) {
-            statusBadge = '<span class="badge bg-danger">Cancellata</span>';
+            statusBadge = '<span class="badge bg-danger rounded-pill">Cancellata</span>';
             actionButton = '';
         } else if (isPast) {
-            statusBadge = '<span class="badge bg-secondary">Completata</span>';
+            statusBadge = '<span class="badge bg-secondary rounded-pill">Completata</span>';
             if (currentUser.role === 'mentee' && !booking.has_review) {
-                actionButton = `<button class="btn btn-sm btn-outline-success open-review-modal-btn" data-booking-id="${booking.id}">Lascia una recensione</button>`;
+                actionButton = `<button class="btn btn-sm btn-outline-warning rounded-pill open-review-modal-btn" data-booking-id="${booking.id}"><i class="fas fa-star me-1"></i> Recensisci</button>`;
             } else {
                 actionButton = '';
             }
         } else if (booking.status === 'pending') {
-            statusBadge = `<span class="badge bg-warning text-dark">In Attesa di Pagamento</span>`;
+            statusBadge = `<span class="badge bg-warning text-dark rounded-pill">In Attesa di Pagamento</span>`;
             if (currentUser.role === 'mentee') {
-                actionButton = `<button class="btn btn-sm btn-warning pay-now-btn me-2" 
+                actionButton = `<button class="btn btn-sm btn-warning rounded-pill pay-now-btn me-2" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#paymentModal"
                                     data-booking-id="${booking.id}"
@@ -113,31 +138,38 @@ $(document).ready(function() {
             } else {
                 actionButton = '';
             }
-            const cancelButton = `<button class="btn btn-sm btn-outline-danger cancel-booking-btn" data-booking-id="${booking.id}">Annulla</button>`;
+            const cancelButton = `<button class="btn btn-sm btn-outline-danger rounded-pill cancel-booking-btn" data-booking-id="${booking.id}">Annulla</button>`;
             actionButton += cancelButton;
         } else {
-            statusBadge = `<span class="badge bg-primary">Confermata</span>`;
+            statusBadge = `<span class="badge bg-primary rounded-pill">Confermata</span>`;
             let meetingButton = '';
             if (booking.meeting_link) {
-                meetingButton = `<a href="${booking.meeting_link}" target="_blank" class="btn btn-sm btn-success me-2">Partecipa</a>`;
+                meetingButton = `<a href="${booking.meeting_link}" target="_blank" class="btn btn-sm btn-success rounded-pill me-2"><i class="fas fa-video me-1"></i> Partecipa</a>`;
             }
-            const cancelButton = `<button class="btn btn-sm btn-outline-danger cancel-booking-btn" data-booking-id="${booking.id}">Annulla</button>`;
+            const cancelButton = `<button class="btn btn-sm btn-outline-danger rounded-pill cancel-booking-btn" data-booking-id="${booking.id}">Annulla</button>`;
             actionButton = meetingButton + cancelButton;
         }
 
         return `
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <img src="${otherUserAvatar}" alt="Avatar" class="rounded-circle me-3" width="60" height="60" style="object-fit: cover;">
-                        <div class="flex-grow-1">
-                            <h5 class="card-title mb-1">Sessione con ${otherUserName}</h5>
-                            <p class="card-text text-muted mb-2">${startTime}</p>
-                            ${statusBadge}
-                        </div>
-                        <div class="ms-auto">
-                            ${actionButton}
-                        </div>
+            <div class="card border-0 shadow-sm mb-3 rounded-4 overflow-hidden">
+                <div class="card-body p-4 d-flex align-items-center flex-wrap gap-3">
+                    <!-- Data Box -->
+                    <div class="booking-date-box rounded-3 p-2 text-center text-primary">
+                        <h3 class="fw-bold mb-0">${day}</h3>
+                        <small class="fw-bold text-uppercase">${month}</small>
+                        <div class="small text-muted mt-1 border-top pt-1">${time}</div>
+                    </div>
+
+                    <!-- Avatar & Info -->
+                    <img src="${otherUserAvatar}" alt="Avatar" class="rounded-circle border" width="60" height="60" style="object-fit: cover;">
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold mb-1">${otherUserName}</h5>
+                        <div class="mb-2">${statusBadge}</div>
+                    </div>
+
+                    <!-- Azioni -->
+                    <div class="ms-auto text-end">
+                        ${actionButton}
                     </div>
                 </div>
             </div>`;
