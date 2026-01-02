@@ -23,7 +23,18 @@ $(document).ready(function() {
                 greeting = 'Benvenuto/a';
             }
             
-            $('#welcome-message').text(`${greeting}, ${user.name}!`);
+            // Genera la Hero Section
+            const avatarUrl = user.avatar_url ? `${BASE_URL}${user.avatar_url}` : 'https://via.placeholder.com/150';
+            const heroHtml = `
+                <div class="dashboard-hero d-flex align-items-center">
+                    <img src="${avatarUrl}" alt="Avatar" class="rounded-circle me-4 border border-3 border-white" width="80" height="80" style="object-fit: cover;">
+                    <div>
+                        <h2 class="fw-bold mb-0">${greeting}, ${user.name}!</h2>
+                        <p class="mb-0 opacity-75">Ecco cosa sta succedendo oggi nella tua dashboard.</p>
+                    </div>
+                </div>
+            `;
+            $('#dashboard-hero-container').html(heroHtml);
 
             // Mostra il pannello corretto in base al ruolo dell'utente
             if (user.role === 'mentor') {
@@ -49,15 +60,13 @@ $(document).ready(function() {
     function createDashboardCard(href, iconClass, title, text) {
         return `
             <div class="col-lg-4 col-md-6 mb-4">
-                <a href="${href}" class="text-decoration-none">
-                    <div class="card dashboard-card h-100">
-                        <div class="card-body text-center">
-                            <div class="dashboard-card-icon mb-3">
-                                <i class="fas ${iconClass} fa-2x text-primary"></i>
-                            </div>
-                            <h5 class="card-title">${title}</h5>
-                            <p class="card-text text-muted">${text}</p>
+                <a href="${href}" class="text-decoration-none text-dark">
+                    <div class="card action-card h-100">
+                        <div class="action-icon-circle">
+                            <i class="fas ${iconClass} fa-2x text-muted"></i>
                         </div>
+                        <h5 class="fw-bold">${title}</h5>
+                        <p class="text-muted small mb-0">${text}</p>
                     </div>
                 </a>
             </div>
@@ -93,11 +102,14 @@ $(document).ready(function() {
                 // Card 1: Prossime Sessioni
                 statsRow.append(`
                     <div class="col-md-4 mb-4">
-                        <div class="card text-center h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Prossime Sessioni</h5>
-                                <p class="display-4 fw-bold">${stats.upcomingBookings}</p>
+                        <div class="card stat-card border-left-primary h-100 p-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="stat-icon-wrapper bg-light-primary me-3">
+                                    <i class="fas fa-calendar-check fa-lg"></i>
+                                </div>
+                                <h6 class="text-muted mb-0">Prossime Sessioni</h6>
                             </div>
+                            <h3 class="fw-bold mb-0 ms-1">${stats.upcomingBookings}</h3>
                         </div>
                     </div>
                 `);
@@ -105,12 +117,14 @@ $(document).ready(function() {
                 // Card 2: Valutazione Media
                 statsRow.append(`
                     <div class="col-md-4 mb-4">
-                        <div class="card text-center h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Valutazione Media</h5>
-                                <p class="display-4 fw-bold">⭐ ${stats.averageRating}</p>
-                                <p class="card-text text-muted">basata su ${stats.ratingCount} recensioni</p>
+                        <div class="card stat-card border-left-warning h-100 p-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="stat-icon-wrapper bg-light-warning me-3">
+                                    <i class="fas fa-star fa-lg"></i>
+                                </div>
+                                <h6 class="text-muted mb-0">Valutazione Media</h6>
                             </div>
+                            <h3 class="fw-bold mb-0 ms-1">${stats.averageRating} <small class="text-muted fs-6">(${stats.ratingCount} recensioni)</small></h3>
                         </div>
                     </div>
                 `);
@@ -128,9 +142,14 @@ $(document).ready(function() {
                 }
                 statsRow.append(`
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Ultime Recensioni</h5>
+                        <div class="card stat-card border-left-success h-100 p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="stat-icon-wrapper bg-light-success me-3">
+                                    <i class="fas fa-comments fa-lg"></i>
+                                </div>
+                                <h6 class="text-muted mb-0">Ultime Recensioni</h6>
+                            </div>
+                            <div class="small">
                                 ${reviewsHtml}
                             </div>
                         </div>
@@ -151,7 +170,7 @@ $(document).ready(function() {
                     const avatarUrl = stats.nextBooking.mentor_avatar ? `${BASE_URL}${stats.nextBooking.mentor_avatar}` : 'https://via.placeholder.com/80';
                     statsRow.html(`
                         <div class="col-12">
-                            <div class="card bg-primary text-white">
+                            <div class="card bg-primary text-white shadow-lg border-0 rounded-4">
                                 <div class="card-body d-flex align-items-center">
                                     <img src="${avatarUrl}" alt="Avatar" class="rounded-circle me-3" width="60" height="60">
                                     <div>
