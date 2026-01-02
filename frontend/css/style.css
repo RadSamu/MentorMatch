@@ -262,3 +262,21 @@ body {
     border-color: var(--primary-color) !important;
     text-transform: capitalize;
 }
+
+/* --- Booking Card Styles --- */
+.booking-date-box {
+    min-width: 90px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.nav-pills .nav-link {
+    color: var(--secondary-color);
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--primary-color);
+    color: white;
+}

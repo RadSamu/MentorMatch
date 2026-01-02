@@ -13,17 +13,35 @@
     <!-- La nostra navbar riutilizzabile -->
     <div id="navbar-placeholder"></div>
 
-    <div class="container mt-5">
-        <h2>Le tue Prossime Prenotazioni</h2>
-        <div id="future-bookings-list">
-            <!-- Lista delle prenotazioni future -->
+    <!-- Header Sfumato -->
+    <div class="profile-header text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-2">Le mie Prenotazioni</h2>
+            <p class="opacity-75">Gestisci le tue sessioni, visualizza lo storico e lascia recensioni.</p>
         </div>
+    </div>
 
-        <hr class="my-5">
+    <div class="container pb-5">
+        <div id="alert-placeholder"></div>
 
-        <h2>Prenotazioni Passate</h2>
-        <div id="past-bookings-list">
-            <!-- Lista delle prenotazioni passate -->
+        <!-- Tabs di Navigazione -->
+        <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded-pill" id="pills-upcoming-tab" data-bs-toggle="pill" data-bs-target="#pills-upcoming" type="button" role="tab">📅 In Arrivo</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill" id="pills-completed-tab" data-bs-toggle="pill" data-bs-target="#pills-completed" type="button" role="tab">✅ Completate</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill" id="pills-canceled-tab" data-bs-toggle="pill" data-bs-target="#pills-canceled" type="button" role="tab">❌ Cancellate</button>
+            </li>
+        </ul>
+
+        <!-- Contenuto Tabs -->
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-upcoming" role="tabpanel"></div>
+            <div class="tab-pane fade" id="pills-completed" role="tabpanel"></div>
+            <div class="tab-pane fade" id="pills-canceled" role="tabpanel"></div>
         </div>
     </div>
 
