@@ -10,64 +10,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        /* Container principale con bordi arrotondati e ombra */
-        .chat-container { height: 80vh; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: none; }
-        
-        /* Lista conversazioni */
-        .conversations-list { height: 100%; overflow-y: auto; background-color: #f8f9fa; border-right: 1px solid #eee; }
-        .conversation-item { border: none; border-bottom: 1px solid #f1f1f1; transition: all 0.2s; padding: 15px; }
-        .conversation-item:hover { background-color: #e9ecef; }
-        .conversation-item.active { background-color: #fff; border-left: 4px solid #0d6efd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        
-        /* Area messaggi */
-        .messages-box { height: calc(100% - 60px); overflow-y: auto; }
-        
-        /* Bolle dei messaggi stile "fumetto" */
-        .message-bubble { display: inline-block; padding: 12px 18px; border-radius: 18px; max-width: 75%; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .message.sent { text-align: right; }
-        .message.sent .message-bubble { background-color: #0d6efd; color: white; border-bottom-right-radius: 4px; }
-        .message.received .message-bubble { background-color: #f1f3f5; color: #212529; border-bottom-left-radius: 4px; }
-
-        /* Stili per il feedback di invio */
-        .message.pending { opacity: 0.6; }
-        .message.error .message-bubble { background-color: #dc3545; } /* Colore rosso per l'errore */
-        .message-status {
-            font-size: 0.75rem;
-            color: #6c757d;
-        }
-        .message.sent .message-status { color: #adb5bd; }
-        .status-icon {
-            display: inline-block;
-            width: 1rem;
-            text-align: center;
-        }
-        .retry-btn {
-            color: #fc0000;
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 0.7rem;
-        }
-        /* Stili per i divisori di data */
+        /* Stili specifici inline minimi, il resto è in style.css */
         .date-separator { position: relative; text-align: center; margin: 1.5rem 0; }
         .date-separator::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #dee2e6; z-index: 0; }
-        /* Nota: background-color deve corrispondere allo sfondo della chat (bianco) per coprire la linea */
         .date-separator span { background-color: #fff; padding: 0 10px; color: #6c757d; font-size: 0.75rem; position: relative; z-index: 1; }
-        
-        /* Nuova barra di input */
-        .message-form { min-height: 70px; background: #fff; padding: 15px !important; }
-        .message-input-wrapper { background: #f8f9fa; border-radius: 25px; padding: 5px 15px; border: 1px solid #dee2e6; display: flex; align-items: center; width: 100%; transition: border-color 0.2s; }
-        .message-input-wrapper:focus-within { border-color: #0d6efd; background: #fff; }
-        textarea#message-input { resize: none; overflow-y: hidden; height: 38px; max-height: 120px; border: none; background: transparent; box-shadow: none; padding: 8px 0; }
-        textarea#message-input:focus { outline: none; }
-        .send-btn { border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; flex-shrink: 0; }
-        .send-btn:hover { transform: scale(1.1); }
-        
+        .message.pending { opacity: 0.6; }
+        .message.error .message-bubble { background-color: #dc3545; }
+        .message-status { font-size: 0.75rem; color: #adb5bd; }
+        .retry-btn { color: #dc3545; font-size: 0.75rem; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
     <div id="navbar-placeholder"></div>
 
-    <div class="container-fluid mt-4">
+    <!-- Header Sfumato -->
+    <div class="profile-header text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-2">Messaggi</h2>
+            <p class="opacity-75">Chatta con i tuoi mentor e mentee in tempo reale.</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
         <div class="card chat-container">
             <div class="row g-0 h-100">
                 <!-- Colonna Conversazioni -->
@@ -77,25 +41,27 @@
                     </div>
                 </div>
                 <!-- Colonna Destra: Contenitore per la chat o la finestra di benvenuto -->
-                <div class="col-md-8 h-100 d-flex flex-column p-0">
+                <div class="col-md-8 h-100 chat-main-area">
                     <!-- Finestra di benvenuto (visibile all'inizio) -->
                     <div class="d-flex flex-column h-100 justify-content-center align-items-center text-center" id="welcome-window">
-                        <i class="fas fa-comments fa-4x text-muted mb-3"></i>
-                        <h4>Benvenuto nei tuoi messaggi</h4>
+                        <div class="bg-light rounded-circle p-4 mb-3">
+                            <i class="fas fa-paper-plane fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold">I tuoi Messaggi</h4>
                         <p class="text-muted">Seleziona una conversazione dalla lista a sinistra per iniziare a chattare.</p>
                     </div>
                     <!-- Contenitore della Chat (nascosto all'inizio) -->
                     <div class="d-none flex-column flex-grow-1 h-100" id="chat-container">
                         <!-- Header della Chat -->
-                        <div class="p-3 border-bottom" id="chat-header"></div>
+                        <div class="chat-header" id="chat-header"></div>
                         <!-- Box dei Messaggi -->
-                        <div class="p-3 flex-grow-1" style="overflow-y: auto;" id="messages-list"></div>
+                        <div class="messages-box" id="messages-list"></div>
                         <!-- Form di Invio Messaggio -->
-                        <form id="message-form" class="border-top message-form">
+                        <form id="message-form" class="message-form">
                             <input type="hidden" id="receiver-id-input">
                             <div class="message-input-wrapper">
-                                <textarea id="message-input" class="form-control" placeholder="Scrivi un messaggio..." rows="1" required></textarea>
-                                <button type="submit" class="btn btn-primary send-btn ms-2"><i class="fas fa-paper-plane"></i></button>
+                                <textarea id="message-input" class="form-control shadow-none" placeholder="Scrivi un messaggio..." rows="1" required></textarea>
+                                <button type="submit" class="btn btn-primary send-btn rounded-circle shadow-sm"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </form>
                     </div>

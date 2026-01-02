@@ -43,7 +43,7 @@ $(document).ready(function() {
         // Header Chat Arricchito
         $('#chat-header').html(`
             <div class="d-flex align-items-center">
-                <img src="${otherUserAvatar}" class="rounded-circle me-3" width="45" height="45" style="object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <img src="${otherUserAvatar}" class="rounded-circle me-3 border shadow-sm" width="45" height="45" style="object-fit: cover;">
                 <div>
                     <h6 class="mb-0 fw-bold">${otherUserName}</h6>
                     <small class="text-success"><i class="fas fa-circle fa-xs me-1"></i>Online</small>
