@@ -15,9 +15,14 @@ $(document).ready(function() {
 
         ApiService.post('/auth/register', userData)
             .done(function(response) {
-                showAlert('Registrazione avvenuta con successo! Ora puoi effettuare il login.', 'success');
+                showAlert('Registrazione avvenuta con successo! Reindirizzamento al login...', 'success');
                 // Svuota il form dopo il successo
                 $('#register-form')[0].reset();
+
+                // Reindirizza alla pagina di login dopo 2 secondi (2000 ms)
+                setTimeout(function() {
+                    window.location.href = '/login.html';
+                }, 2000);
             })
             .fail(function(xhr) {
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore durante la registrazione.';
