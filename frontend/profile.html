@@ -6,55 +6,98 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <title>Modifica Profilo - MentorMatch</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Stile specifico per le card del profilo */
+        .profile-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: white;
+            height: 100%;
+        }
+        .form-floating > label { color: #6c757d; }
+    </style>
 </head>
 <body>
     <!-- La nostra navbar riutilizzabile -->
     <div id="navbar-placeholder"></div>
 
-    <div class="container mt-5">
-        <h2>Modifica il tuo Profilo Pubblico</h2>
-        <p>Queste informazioni saranno visibili agli altri utenti sulla piattaforma.</p>
+    <!-- Header Sfumato -->
+    <div class="profile-header text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-2">Il tuo Profilo</h2>
+            <p class="opacity-75">Gestisci le tue informazioni personali e professionali.</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
         <div id="alert-placeholder"></div>
 
-        <!-- Sezione Avatar -->
-        <div class="text-center mb-4">
-            <img id="avatar-preview" src="https://via.placeholder.com/150" class="rounded-circle" alt="Avatar" width="150" height="150" style="object-fit: cover;">
+        <div class="row g-4">
+            <!-- Colonna Sinistra: Riepilogo e Avatar -->
+            <div class="col-md-4">
+                <div class="card profile-card text-center p-4">
+                    <div class="card-body">
+                        <!-- Avatar Uploader Interattivo -->
+                        <div class="profile-avatar-wrapper mb-3" onclick="document.getElementById('avatar-file').click()" title="Clicca per cambiare foto">
+                            <img id="avatar-preview" src="https://via.placeholder.com/150" alt="Avatar">
+                            <div class="profile-avatar-overlay">
+                                <i class="fas fa-camera text-white fa-2x"></i>
+                            </div>
+                        </div>
+                        <!-- Input file nascosto -->
+                        <input type="file" id="avatar-file" name="avatar" accept="image/*" style="display: none;">
+                        
+                        <h4 id="profile-name" class="fw-bold mb-1">Caricamento...</h4>
+                        <div id="profile-role-badge" class="mb-3"></div>
+                        
+                        <div id="mentor-rating-display" style="display:none;" class="p-3 bg-light rounded-3 mt-3">
+                            <h2 class="fw-bold mb-0 text-warning" id="rating-value">0.0</h2>
+                            <div class="small text-muted">Valutazione Media</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colonna Destra: Form di Modifica -->
+            <div class="col-md-8">
+                <div class="card profile-card p-4">
+                    <div class="card-body">
+                        <form id="profile-form">
+                            <h5 class="mb-4 fw-bold text-primary"><i class="fas fa-user-edit me-2"></i>Dettagli Profilo</h5>
+                            
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="headline" placeholder="Headline">
+                                <label for="headline">Headline (Titolo Professionale)</label>
+                            </div>
+                            
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="bio" placeholder="Bio" style="height: 150px"></textarea>
+                                <label for="bio">Biografia</label>
+                            </div>
+
+                            <h5 class="mb-4 mt-5 fw-bold text-primary"><i class="fas fa-briefcase me-2"></i>Competenze & Tariffe</h5>
+                            
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="languages" placeholder="Lingue">
+                                <label for="languages">Lingue Parlate (es. Italiano, Inglese)</label>
+                            </div>
+                            
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="hourly_rate" placeholder="Tariffa" step="0.01" min="0">
+                                <label for="hourly_rate">Tariffa Oraria (€)</label>
+                            </div>
+
+                            <div class="text-end mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">Salva Modifiche</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <form id="avatar-form" class="mb-5">
-            <div class="input-group">
-                <input type="file" class="form-control" id="avatar-file" name="avatar" accept="image/*">
-                <button class="btn btn-secondary" type="submit">Carica Foto</button>
-            </div>
-            <div class="form-text">
-                Scegli un'immagine quadrata per un risultato migliore.
-            </div>
-        </form>
-
-        <hr>
-
-        <form id="profile-form">
-            <div class="mb-3">
-                <label for="headline" class="form-label">Headline</label>
-                <input type="text" class="form-control" id="headline" placeholder="Es. Sviluppatore Full-Stack con esperienza in React e Node.js">
-                <div class="form-text">Una frase breve che descrive la tua professionalità.</div>
-            </div>
-            <div class="mb-3">
-                <label for="bio" class="form-label">Biografia</label>
-                <textarea class="form-control" id="bio" rows="5" placeholder="Parlaci di te, delle tue esperienze e di come puoi aiutare i mentee..."></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="languages" class="form-label">Lingue Parlate</label>
-                <input type="text" class="form-control" id="languages" placeholder="Es. Italiano, Inglese, Francese">
-                <div class="form-text">Separa le lingue con una virgola.</div>
-            </div>
-            <div class="mb-3">
-                <label for="hourly_rate" class="form-label">Tariffa Oraria (€)</label>
-                <input type="number" class="form-control" id="hourly_rate" placeholder="Es. 30.00" step="0.01" min="0">
-                <div class="form-text">Inserisci la tua tariffa per sessione (60 min). Lascia vuoto o 0 per sessioni gratuite.</div>
-            </div>
-            <button type="submit" class="btn btn-primary">Salva Profilo</button>
-        </form>
     </div>
 
     <!-- Toast Container per notifiche -->
