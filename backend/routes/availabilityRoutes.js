@@ -11,17 +11,18 @@ const {
 // @route   POST api/availability
 // @desc    Un mentor aggiunge una sua fascia oraria
 // @access  Privato (solo Mentor)
-router.post('/', authMiddleware, createAvailability);
+const mentorMiddleware = require('../middleware/mentorMiddleware');
+router.post('/', [authMiddleware, mentorMiddleware], createAvailability);
 
 // @route   GET api/availability/me
 // @desc    Ottiene le disponibilità del mentor loggato
 // @access  Privato (solo Mentor)
-router.get('/me', authMiddleware, getMyAvailabilities);
+router.get('/me', [authMiddleware, mentorMiddleware], getMyAvailabilities);
 
 // @route   DELETE api/availability/:id
 // @desc    Un mentor cancella un suo slot di disponibilità
 // @access  Privato (solo Mentor)
-router.delete('/:id', authMiddleware, deleteAvailability);
+router.delete('/:id', [authMiddleware, mentorMiddleware], deleteAvailability);
 
 // @route   GET /api/availability/mentor/:mentorId
 // @desc    Ottiene le disponibilità per un mentor specifico (pubblico)
