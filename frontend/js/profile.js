@@ -88,6 +88,8 @@ $(document).ready(function() {
             })
             .fail(function(xhr) {
                 showToast('Errore aggiornamento: ' + (xhr.responseJSON?.msg || 'Errore server'), 'danger');
+                // Effetto Shake sulla card del form
+                $('#profile-form').closest('.card').addClass('shake').on('animationend', function() { $(this).removeClass('shake'); });
             })
             .always(function() {
                 Loading.stop(submitBtn); // Ripristina pulsante

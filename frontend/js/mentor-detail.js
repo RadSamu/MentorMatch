@@ -147,7 +147,7 @@ $(document).ready(function() {
                     reviews.forEach(review => {
                         const reviewDate = new Date(review.created_at).toLocaleDateString('it-IT');
                         const reviewCard = `
-                            <div class="card mb-3 border-0 border-bottom rounded-0">
+                            <div class="card mb-3 border-0 border-bottom rounded-0 stagger-item">
                                 <div class="card-body px-0">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h6 class="fw-bold mb-0">${review.mentee_name}</h6>
