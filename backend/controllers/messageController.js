@@ -93,6 +93,13 @@ exports.sendMessage = async (req, res) => {
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
+
+        // BUG FIX: Controlla se il destinatario esiste
+        const receiverExists = await client.query('SELECT id FROM users WHERE id = $1', [receiverId]);
+        if (receiverExists.rows.length === 0) {
+            return res.status(404).json({ msg: 'Destinatario non trovato.' });
+        }
+
         const newMessage = await client.query(
             'INSERT INTO messages (from_user, to_user, body) VALUES ($1, $2, $3) RETURNING *',
             [senderId, receiverId, body]

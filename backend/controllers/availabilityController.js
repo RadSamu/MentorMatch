@@ -18,6 +18,18 @@ exports.createAvailability = async (req, res) => {
         // Calcoliamo l'ora di fine (es. 1 ora dopo l'inizio)
         const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
 
+        // BUG FIX: Controlla se esiste già uno slot che si sovrappone
+        const overlapCheck = await pool.query(
+            `SELECT id FROM availabilities 
+             WHERE mentor_id = $1 
+             AND (start_ts, end_ts) OVERLAPS ($2, $3)`,
+            [mentor_id, startTime, endTime]
+        );
+
+        if (overlapCheck.rows.length > 0) {
+            return res.status(400).json({ msg: 'Hai già una disponibilità o una prenotazione in questo orario.' });
+        }
+
         const newSlot = await pool.query(
             'INSERT INTO availabilities (mentor_id, start_ts, end_ts, meeting_link) VALUES ($1, $2, $3, $4) RETURNING *',
             [mentor_id, startTime, endTime, meeting_link]

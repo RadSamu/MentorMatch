@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const authMiddleware = require('../middleware/authMiddleware');
 const { getMe, updateUserProfile, uploadAvatar } = require('../controllers/userController');
+const mentorMiddleware = require('../middleware/mentorMiddleware');
 
 // --- Configurazione di Multer per l'upload dell'avatar ---
 const storage = multer.diskStorage({
@@ -27,7 +28,7 @@ router.get('/me', authMiddleware, getMe);
 
 // @route   PUT /api/users/profile
 // @desc    Aggiorna il profilo di un mentor
-router.put('/profile', authMiddleware, updateUserProfile);
+router.put('/profile', [authMiddleware, mentorMiddleware], updateUserProfile);
 
 // @route   POST /api/users/avatar
 // @desc    Carica un avatar per l'utente loggato
