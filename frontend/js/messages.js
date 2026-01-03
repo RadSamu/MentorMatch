@@ -326,7 +326,7 @@ $(document).ready(function() {
                     // Rimuoviamo la classe 'active' da altre conversazioni
                     $('.conversation-item').removeClass('active');
                     // Apriamo la finestra della chat per il nuovo utente
-                    const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : window.DEFAULT_AVATAR;
+                    const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
                     loadMessages(openWithUserId, mentorFullName, avatarUrl);
                 }
             }
@@ -358,7 +358,7 @@ $(document).ready(function() {
 
             conversations.forEach(conv => {
                 // Usiamo un SVG come placeholder per non dipendere da servizi esterni
-                const avatarUrl = conv.avatar_url ? `${BASE_URL}${conv.avatar_url}` : window.DEFAULT_AVATAR;
+                const avatarUrl = window.getAvatarUrl(conv.avatar_url);
                 const unreadClass = conv.has_unread ? 'fw-bold' : '';
                 const item = `
                     <a href="#" class="list-group-item list-group-item-action conversation-item ${unreadClass}" data-user-id="${conv.id}" data-user-name="${conv.name} ${conv.surname}">

@@ -14,7 +14,7 @@ $(document).ready(function() {
             }
 
             mentors.forEach(mentor => {
-                const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : window.DEFAULT_AVATAR;
+                const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
                 const headline = mentor.sector || 'Esperto';
                 const bioSnippet = mentor.bio ? mentor.bio.substring(0, 80) + '...' : '...';
                 

@@ -24,7 +24,7 @@ $(document).ready(function() {
             }
             
             // Genera la Hero Section
-            const avatarUrl = user.avatar_url ? `${BASE_URL}${user.avatar_url}` : window.DEFAULT_AVATAR;
+            const avatarUrl = window.getAvatarUrl(user.avatar_url);
             const heroHtml = `
                 <div class="dashboard-hero d-flex align-items-center">
                     <img src="${avatarUrl}" alt="Avatar" class="rounded-circle me-4 border border-3 border-white" width="80" height="80" style="object-fit: cover;">
@@ -167,7 +167,7 @@ $(document).ready(function() {
 
                 if (stats.nextBooking) {
                     const bookingDate = new Date(stats.nextBooking.start_ts).toLocaleString('it-IT', { dateStyle: 'full', timeStyle: 'short' });
-                    const avatarUrl = stats.nextBooking.mentor_avatar ? `${BASE_URL}${stats.nextBooking.mentor_avatar}` : window.DEFAULT_AVATAR;
+                    const avatarUrl = window.getAvatarUrl(stats.nextBooking.mentor_avatar);
                     statsRow.html(`
                         <div class="col-12">
                             <div class="card bg-primary text-white shadow-lg border-0 rounded-4">
@@ -220,7 +220,7 @@ $(document).ready(function() {
                 if (mentors.length > 0) {
                     section.show();
                     mentors.forEach(mentor => {
-                        const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : window.DEFAULT_AVATAR;
+                        const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
                         const cardHtml = `
                             <div class="col-md-4 col-lg-3 mb-4">
                                 <a href="/mentor-detail.html?id=${mentor.id}" class="text-decoration-none text-dark">
