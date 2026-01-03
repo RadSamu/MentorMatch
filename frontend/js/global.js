@@ -1,3 +1,6 @@
+// --- Costante Avatar Default (SVG Base64 per evitare errori di rete) ---
+window.DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
+
 // --- Servizio API Centralizzato ---
 window.ApiService = {
     API_URL: '/api',
@@ -111,7 +114,7 @@ $(document).ready(function() {
 
             // Carica i dati utente per la navbar
             ApiService.get('/auth/me').done(function(user) {
-                const avatarUrl = user.avatar_url ? `${ApiService.BASE_URL}${user.avatar_url}` : 'https://placehold.co/40';
+                const avatarUrl = user.avatar_url ? `${ApiService.BASE_URL}${user.avatar_url}` : window.DEFAULT_AVATAR;
                 $('#nav-user-name').text(user.name);
                 $('#nav-user-email').text(user.email);
                 $('#nav-user-avatar').attr('src', avatarUrl);
