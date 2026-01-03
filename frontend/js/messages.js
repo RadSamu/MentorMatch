@@ -165,12 +165,19 @@ $(document).ready(function() {
     }
 
     function pollForNewMessages(userId) {
+        // FIX: Interrompi se l'utente ha cambiato chat nel frattempo
+        const currentReceiverId = parseUserId($('#receiver-id-input').val());
+        if (currentReceiverId !== userId) return;
+
         // Trova l'ID dell'ultimo messaggio visualizzato
         const lastMessageId = $('#messages-list .message').last().data('message-id') || 0;
         console.log(`[POLL START] Polling for user: ${userId}. Last message ID: ${lastMessageId}. Current user ID: ${currentUserId}`);
         
         ApiService.get(`/messages/${userId}?since=${lastMessageId}`)
             .done(function(newMessages) {
+                // FIX: Controllo doppio nel caso la chat sia cambiata durante la richiesta di rete
+                if (parseUserId($('#receiver-id-input').val()) !== userId) return;
+
                 console.log(`[POLL SUCCESS] Received ${newMessages.length} new messages.`);
                 if (newMessages.length > 0) {
                     // Filtra i messaggi che sono veramente nuovi e in arrivo (per l'animazione)
