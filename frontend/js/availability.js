@@ -102,6 +102,12 @@ $(document).ready(function() {
     // 1. Salva Nuovo Slot
     $('#save-slot-btn').click(function() {
         const meetingLink = $('#meeting-link').val();
+        
+        // Validazione manuale del link
+        if (meetingLink && !meetingLink.match(/^https?:\/\/.+/)) {
+            return showAlert('Inserisci un link valido (deve iniziare con http:// o https://)', 'warning');
+        }
+
         const btn = $(this);
         
         Loading.start(btn);
