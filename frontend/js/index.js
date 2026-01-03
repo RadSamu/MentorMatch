@@ -14,7 +14,7 @@ $(document).ready(function() {
             }
 
             mentors.forEach(mentor => {
-                const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : 'https://via.placeholder.com/150';
+                const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : 'https://placehold.co/150';
                 const headline = mentor.sector || 'Esperto';
                 const bioSnippet = mentor.bio ? mentor.bio.substring(0, 80) + '...' : '...';
                 

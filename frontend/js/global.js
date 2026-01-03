@@ -111,7 +111,7 @@ $(document).ready(function() {
 
             // Carica i dati utente per la navbar
             ApiService.get('/auth/me').done(function(user) {
-                const avatarUrl = user.avatar_url ? `${ApiService.BASE_URL}${user.avatar_url}` : 'https://via.placeholder.com/40';
+                const avatarUrl = user.avatar_url ? `${ApiService.BASE_URL}${user.avatar_url}` : 'https://placehold.co/40';
                 $('#nav-user-name').text(user.name);
                 $('#nav-user-email').text(user.email);
                 $('#nav-user-avatar').attr('src', avatarUrl);

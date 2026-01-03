@@ -46,7 +46,7 @@ $(document).ready(function() {
             const bio = mentor.bio || 'Nessuna biografia disponibile.';
             const rating = parseFloat(mentor.rating_avg).toFixed(1);
             const ratingCount = mentor.rating_count;
-            const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : 'https://via.placeholder.com/150';
+            const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : 'https://placehold.co/150';
             const price = mentor.hourly_rate ? parseFloat(mentor.hourly_rate).toFixed(0) : '0';
 
             // L'icona parte sempre come cuore vuoto ('far'), poi viene aggiornata se è un preferito
