@@ -45,7 +45,7 @@ $(document).ready(function() {
             <div class="d-flex align-items-center">
                 <img src="${otherUserAvatar}" class="rounded-circle me-3 border shadow-sm" width="45" height="45" style="object-fit: cover;">
                 <div>
-                    <h6 class="mb-0 fw-bold">${otherUserName}</h6>
+                    <h6 class="mb-0 fw-bold">${window.escapeHtml(otherUserName)}</h6>
                     <small class="text-success"><i class="fas fa-circle fa-xs me-1"></i>Online</small>
                 </div>
             </div>
@@ -74,18 +74,19 @@ $(document).ready(function() {
                     }
 
                     const messageClass = parseUserId(msg.from_user) === currentUserId ? 'sent' : 'received';
+                    const safeBody = window.escapeHtml(msg.body);
                     
                     let item;
                     if (messageClass === 'received') {
                         item = `
                             <div class="message received mb-2" data-message-id="${msg.id}" data-timestamp="${msg.created_at}">
-                                <div class="message-bubble">${msg.body}</div>
+                                <div class="message-bubble">${safeBody}</div>
                                 <small class="text-muted d-block mt-1">${new Date(msg.created_at).toLocaleTimeString('it-IT', {timeStyle: 'short'})}</small>
                             </div>`;
                     } else { // sent
                         item = `
                             <div class="message sent mb-2" data-message-id="${msg.id}" data-timestamp="${msg.created_at}">
-                                <div class="message-bubble">${msg.body}</div>
+                                <div class="message-bubble">${safeBody}</div>
                                 <div class="message-status d-flex justify-content-end align-items-center mt-1">
                                     <small class="me-1">${new Date(msg.created_at).toLocaleTimeString('it-IT', {timeStyle: 'short'})}</small>
                                     <span class="status-icon">✓</span>
@@ -150,7 +151,7 @@ $(document).ready(function() {
 
                 const item = `
                     <div class="message received mb-2" data-message-id="${msg.id}" data-timestamp="${msg.created_at}">
-                        <div class="message-bubble">${msg.body}</div>
+                        <div class="message-bubble">${window.escapeHtml(msg.body)}</div>
                         <small class="text-muted d-block mt-1">${new Date(msg.created_at).toLocaleTimeString('it-IT', {timeStyle: 'short'})}</small>
                     </div>`;
                 messagesList.append(item);
@@ -268,9 +269,10 @@ $(document).ready(function() {
             `);
         }
 
+        const safeBody = window.escapeHtml(body);
         const pendingItemHtml = `
             <div class="message sent pending mb-2" data-temp-id="${tempId}" data-body="${body}" data-receiver-id="${receiverId}" data-timestamp="${now.toISOString()}">
-                <div class="message-bubble">${body}</div>
+                <div class="message-bubble">${safeBody}</div>
                 <div class="message-status d-flex justify-content-end align-items-center mt-1">
                     <small class="me-1">${new Date().toLocaleTimeString('it-IT', {timeStyle: 'short'})}</small>
                     <span class="status-icon">🕓</span>
@@ -372,8 +374,8 @@ $(document).ready(function() {
                         <div class="d-flex w-100 justify-content-start align-items-center py-1">
                             <img src="${avatarUrl}" class="rounded-circle me-3" width="50" height="50">
                             <div class="flex-grow-1">
-                                <h6 class="mb-1">${conv.name} ${conv.surname}</h6>
-                                <small class="text-muted text-truncate d-block">${conv.last_message}</small>
+                                <h6 class="mb-1">${window.escapeHtml(conv.name)} ${window.escapeHtml(conv.surname)}</h6>
+                                <small class="text-muted text-truncate d-block">${window.escapeHtml(conv.last_message)}</small>
                             </div>
                         </div>
                     </a>`;

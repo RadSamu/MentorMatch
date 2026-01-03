@@ -29,7 +29,7 @@ $(document).ready(function() {
                 <div class="dashboard-hero d-flex align-items-center">
                     <img src="${avatarUrl}" alt="Avatar" class="rounded-circle me-4 border border-3 border-white" width="80" height="80" style="object-fit: cover;">
                     <div>
-                        <h2 class="fw-bold mb-0">${greeting}, ${user.name}!</h2>
+                        <h2 class="fw-bold mb-0">${greeting}, ${window.escapeHtml(user.name)}!</h2>
                         <p class="mb-0 opacity-75">Ecco cosa sta succedendo oggi nella tua dashboard.</p>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ $(document).ready(function() {
                     </div>`;
                 if (stats.recentReviews.length > 0) {
                     reviewsHtml = stats.recentReviews.map(r => 
-                        `<div class="mb-2"><strong>${r.mentee_name}:</strong> "${r.comment || 'Nessun commento'}" (${'⭐'.repeat(r.rating)})</div>`
+                        `<div class="mb-2"><strong>${window.escapeHtml(r.mentee_name)}:</strong> "${window.escapeHtml(r.comment) || 'Nessun commento'}" (${'⭐'.repeat(r.rating)})</div>`
                     ).join('');
                 }
                 statsRow.append(`
@@ -175,7 +175,7 @@ $(document).ready(function() {
                                     <img src="${avatarUrl}" alt="Avatar" class="rounded-circle me-3" width="60" height="60">
                                     <div>
                                         <h5 class="card-title">La tua Prossima Sessione</h5>
-                                        <p class="card-text mb-0">Con <strong>${stats.nextBooking.mentor_name}</strong> il ${bookingDate}.</p>
+                                        <p class="card-text mb-0">Con <strong>${window.escapeHtml(stats.nextBooking.mentor_name)}</strong> il ${bookingDate}.</p>
                                     </div>
                                     ${
                                         (stats.nextBooking.status === 'pending' && stats.nextBooking.price > 0)
@@ -226,9 +226,9 @@ $(document).ready(function() {
                                 <a href="/mentor-detail.html?id=${mentor.id}" class="text-decoration-none text-dark">
                                     <div class="card text-center h-100">
                                         <div class="card-body">
-                                            <img src="${avatarUrl}" alt="Avatar di ${mentor.name}" class="rounded-circle mb-2" width="80" height="80" style="object-fit: cover;">
-                                            <h6 class="card-title mb-1">${mentor.name} ${mentor.surname}</h6>
-                                            <p class="card-text text-muted small">${mentor.sector || ''}</p>
+                                            <img src="${avatarUrl}" alt="Avatar di ${window.escapeHtml(mentor.name)}" class="rounded-circle mb-2" width="80" height="80" style="object-fit: cover;">
+                                            <h6 class="card-title mb-1">${window.escapeHtml(mentor.name)} ${window.escapeHtml(mentor.surname)}</h6>
+                                            <p class="card-text text-muted small">${window.escapeHtml(mentor.sector || '')}</p>
                                         </div>
                                     </div>
                                 </a>

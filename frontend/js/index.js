@@ -15,8 +15,8 @@ $(document).ready(function() {
 
             mentors.forEach(mentor => {
                 const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
-                const headline = mentor.sector || 'Esperto';
-                const bioSnippet = mentor.bio ? mentor.bio.substring(0, 80) + '...' : '...';
+                const headline = window.escapeHtml(mentor.sector || 'Esperto');
+                const bioSnippet = window.escapeHtml(mentor.bio ? mentor.bio.substring(0, 80) + '...' : '...');
                 
                 // Badge prezzo
                 const priceBadge = mentor.hourly_rate 
@@ -34,11 +34,11 @@ $(document).ready(function() {
                             <div class="mentor-card-header">
                                 ${priceBadge}
                                 <div class="mentor-avatar-container">
-                                    <img src="${avatarUrl}" alt="${mentor.name}">
+                                    <img src="${avatarUrl}" alt="${window.escapeHtml(mentor.name)}">
                                 </div>
                             </div>
                             <div class="mentor-card-body text-center">
-                                <h5 class="fw-bold mb-1">${mentor.name} ${mentor.surname}</h5>
+                                <h5 class="fw-bold mb-1">${window.escapeHtml(mentor.name)} ${window.escapeHtml(mentor.surname)}</h5>
                                 <p class="text-primary small mb-2 fw-bold text-uppercase">${headline}</p>
                                 <div class="mb-3">${ratingHtml}</div>
                                 <p class="card-text text-muted small mb-4">${bioSnippet}</p>

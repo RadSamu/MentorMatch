@@ -42,7 +42,7 @@ $(document).ready(function() {
     ApiService.get(`/mentors/${mentorId}`)
         .done(function(mentor) {
             // 3. Popola la pagina con i dati ricevuti
-            const headline = mentor.sector || 'Nessuna specializzazione indicata';
+            const headline = window.escapeHtml(mentor.sector || 'Nessuna specializzazione indicata');
             const bio = mentor.bio || 'Nessuna biografia disponibile.';
             const rating = parseFloat(mentor.rating_avg).toFixed(1);
             const ratingCount = mentor.rating_count;
@@ -55,10 +55,10 @@ $(document).ready(function() {
             // 1. Popola Hero Section
             const heroHtml = `
                 <div class="profile-hero-avatar-container">
-                    <img src="${avatarUrl}" alt="Avatar di ${mentor.name}">
+                    <img src="${avatarUrl}" alt="Avatar di ${window.escapeHtml(mentor.name)}">
                 </div>
                 <h1 class="fw-bold mb-1 d-flex justify-content-center align-items-center">
-                    ${mentor.name} ${mentor.surname} ${heartIcon}
+                    ${window.escapeHtml(mentor.name)} ${window.escapeHtml(mentor.surname)} ${heartIcon}
                 </h1>
                 <p class="lead opacity-75 mb-2">${headline}</p>
                 <div class="d-flex justify-content-center gap-3">
@@ -76,7 +76,7 @@ $(document).ready(function() {
             if (mentor.languages && mentor.languages.length > 0) {
                 skillsHtml += `<div><strong class="text-muted small text-uppercase me-2">Lingue:</strong>`;
                 mentor.languages.forEach(lang => {
-                    skillsHtml += `<span class="badge bg-secondary bg-opacity-10 text-dark me-1">${lang}</span>`;
+                    skillsHtml += `<span class="badge bg-secondary bg-opacity-10 text-dark me-1">${window.escapeHtml(lang)}</span>`;
                 });
                 skillsHtml += `</div>`;
             }
@@ -160,11 +160,11 @@ $(document).ready(function() {
                             <div class="card mb-3 border-0 border-bottom rounded-0 stagger-item">
                                 <div class="card-body px-0">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <h6 class="fw-bold mb-0">${review.mentee_name}</h6>
+                                        <h6 class="fw-bold mb-0">${window.escapeHtml(review.mentee_name)}</h6>
                                         <small class="text-muted">${reviewDate}</small>
                                     </div>
                                     <div class="text-warning mb-2 small">${'⭐'.repeat(review.rating)}</div>
-                                    <p class="card-text text-muted">"${review.comment || 'Nessun commento.'}"</p>
+                                    <p class="card-text text-muted">"${window.escapeHtml(review.comment) || 'Nessun commento.'}"</p>
                                 </div>
                             </div>
                         `;
