@@ -262,4 +262,47 @@ $(document).ready(function() {
     
     // Avvia subito
     window.initScrollReveal();
+
+    // --- Number Counter Animation ---
+    window.initCounters = function() {
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // Minore è più veloce
+
+        const counterObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = +counter.getAttribute('data-target');
+                    const inc = target / speed;
+
+                    const updateCount = () => {
+                        const count = +counter.innerText.replace('+', ''); // Rimuovi + se presente
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc) + (counter.getAttribute('data-suffix') || '');
+                            setTimeout(updateCount, 20);
+                        } else {
+                            counter.innerText = target + (counter.getAttribute('data-suffix') || '');
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter);
+                }
+            });
+        });
+
+        counters.forEach(counter => counterObserver.observe(counter));
+    };
+    window.initCounters();
+
+    // --- Success Checkmark Overlay Utility ---
+    window.showSuccessAnimation = function(message = 'Operazione completata!') {
+        const overlay = $(`
+            <div class="success-overlay">
+                <div class="checkmark-circle mb-4"><div class="checkmark-draw"></div></div>
+                <h3 class="text-white fw-bold">${message}</h3>
+            </div>
+        `).appendTo('body');
+        
+        setTimeout(() => { overlay.fadeOut(500, () => overlay.remove()); }, 2000);
+    };
 });
