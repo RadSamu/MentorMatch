@@ -165,19 +165,19 @@ $(document).ready(function() {
 
             switch (type) {
                 case 'booking_confirmed':
-                    message = `Hai una nuova prenotazione da <strong>${payload.menteeName}</strong>.`;
+                    message = `Hai una nuova prenotazione da <strong>${window.escapeHtml(payload.menteeName)}</strong>.`;
                     link = '/my-bookings.html';
                     break;
                 case 'booking_canceled_by_mentee':
-                    message = `<strong>${payload.menteeName}</strong> ha cancellato la sua prenotazione.`;
+                    message = `<strong>${window.escapeHtml(payload.menteeName)}</strong> ha cancellato la sua prenotazione.`;
                     link = '/my-bookings.html';
                     break;
                 case 'booking_canceled_by_mentor':
-                    message = `La tua sessione con <strong>${payload.mentorName}</strong> è stata cancellata.`;
+                    message = `La tua sessione con <strong>${window.escapeHtml(payload.mentorName)}</strong> è stata cancellata.`;
                     link = '/my-bookings.html';
                     break;
                 case 'new_message':
-                    message = `Hai un nuovo messaggio da <strong>${payload.fromUserName}</strong>.`;
+                    message = `Hai un nuovo messaggio da <strong>${window.escapeHtml(payload.fromUserName)}</strong>.`;
                     link = `/messages.html?with=${payload.fromUserId}`;
                     break;
             }

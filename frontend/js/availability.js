@@ -102,6 +102,9 @@ $(document).ready(function() {
     // 1. Salva Nuovo Slot
     $('#save-slot-btn').click(function() {
         const meetingLink = $('#meeting-link').val();
+        const btn = $(this);
+        
+        Loading.start(btn);
         
         ApiService.post('/availability', { start_time: selectedStartDate.toISOString(), meeting_link: meetingLink })
             .done(function() {
@@ -111,6 +114,9 @@ $(document).ready(function() {
             })
             .fail(function(xhr) {
                 showAlert(`Errore: ${xhr.responseJSON?.msg || 'Impossibile aggiungere.'}`, 'danger');
+            })
+            .always(function() {
+                Loading.stop(btn);
             });
     });
 
