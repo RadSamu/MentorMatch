@@ -108,10 +108,10 @@ $(document).ready(function() {
 
         if (currentUser.role === 'mentor') {
             otherUserName = `${booking.mentee_name} ${booking.mentee_surname}`;
-            otherUserAvatar = booking.mentee_avatar ? `${BASE_URL}${booking.mentee_avatar}` : 'https://via.placeholder.com/80';
+            otherUserAvatar = booking.mentee_avatar ? `${BASE_URL}${booking.mentee_avatar}` : window.DEFAULT_AVATAR;
         } else {
             otherUserName = `${booking.mentor_name} ${booking.mentor_surname}`;
-            otherUserAvatar = booking.mentor_avatar ? `${BASE_URL}${booking.mentor_avatar}` : 'https://via.placeholder.com/80';
+            otherUserAvatar = booking.mentor_avatar ? `${BASE_URL}${booking.mentor_avatar}` : window.DEFAULT_AVATAR;
         }
 
         let statusBadge, actionButton;

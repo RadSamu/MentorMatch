@@ -326,7 +326,7 @@ $(document).ready(function() {
                     // Rimuoviamo la classe 'active' da altre conversazioni
                     $('.conversation-item').removeClass('active');
                     // Apriamo la finestra della chat per il nuovo utente
-                    const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E`;
+                    const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : window.DEFAULT_AVATAR;
                     loadMessages(openWithUserId, mentorFullName, avatarUrl);
                 }
             }
@@ -358,7 +358,7 @@ $(document).ready(function() {
 
             conversations.forEach(conv => {
                 // Usiamo un SVG come placeholder per non dipendere da servizi esterni
-                const avatarUrl = conv.avatar_url ? `${BASE_URL}${conv.avatar_url}` : `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E`;
+                const avatarUrl = conv.avatar_url ? `${BASE_URL}${conv.avatar_url}` : window.DEFAULT_AVATAR;
                 const unreadClass = conv.has_unread ? 'fw-bold' : '';
                 const item = `
                     <a href="#" class="list-group-item list-group-item-action conversation-item ${unreadClass}" data-user-id="${conv.id}" data-user-name="${conv.name} ${conv.surname}">
