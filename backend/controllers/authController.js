@@ -69,6 +69,8 @@ exports.login = async (req, res) => {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (userResult.rows.length === 0) {
       // Messaggio generico per sicurezza: non rivelare se l'email esiste o no
+      // FIX: Esegui un confronto fittizio per prevenire Timing Attacks (Enumerazione Utenti)
+      await bcrypt.compare(password, '$2a$10$abcdefghijklmnopqrstuvwxyzABC'); 
       return res.status(400).json({ msg: 'Credenziali non valide.' });
     }
 
