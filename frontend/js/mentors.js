@@ -101,8 +101,8 @@ $(document).ready(function() {
                 mentors.forEach(mentor => {
                     // Prepariamo i testi, con un messaggio di fallback se non sono stati inseriti
                     const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
-                    const headline = mentor.sector || 'Nessuna specializzazione indicata';
-                    const bioSnippet = mentor.bio ? mentor.bio.substring(0, 100) + '...' : 'Nessuna biografia disponibile.';
+                    const headline = window.escapeHtml(mentor.sector || 'Nessuna specializzazione indicata');
+                    const bioSnippet = window.escapeHtml(mentor.bio ? mentor.bio.substring(0, 100) + '...' : 'Nessuna biografia disponibile.');
 
                     const isFavorite = favoriteMentorIds.includes(mentor.id);
                     const heartClass = isFavorite ? 'fas favorited' : 'far'; // 'fas' per pieno, 'far' per vuoto
@@ -124,12 +124,12 @@ $(document).ready(function() {
                                 <div class="mentor-card-header">
                                     ${priceBadge}
                                     <div class="mentor-avatar-container">
-                                        <img src="${avatarUrl}" alt="${mentor.name}">
+                                        <img src="${avatarUrl}" alt="${window.escapeHtml(mentor.name)}">
                                     </div>
                                 </div>
                                 <div class="mentor-card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h5 class="fw-bold mb-0">${mentor.name} ${mentor.surname}</h5>
+                                        <h5 class="fw-bold mb-0">${window.escapeHtml(mentor.name)} ${window.escapeHtml(mentor.surname)}</h5>
                                         <div class="fs-5 text-danger" style="cursor:pointer;">${heartIcon}</div>
                                     </div>
                                     <p class="text-primary small mb-2 fw-bold text-uppercase">${headline}</p>

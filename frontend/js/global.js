@@ -96,6 +96,17 @@ window.getAvatarUrl = function(url) {
     return `${window.ApiService.BASE_URL}${url}`;
 };
 
+// --- Helper per Sanitizzazione HTML (XSS Protection) ---
+window.escapeHtml = function(text) {
+    if (text === null || text === undefined) return '';
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
 $(document).ready(function() {
     // Carica la navbar nel placeholder
     $('#navbar-placeholder').load('/components/navbar.html?v=' + new Date().getTime(), function() {

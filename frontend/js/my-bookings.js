@@ -107,10 +107,10 @@ $(document).ready(function() {
         let otherUserName, otherUserAvatar;
 
         if (currentUser.role === 'mentor') {
-            otherUserName = `${booking.mentee_name} ${booking.mentee_surname}`;
+            otherUserName = `${window.escapeHtml(booking.mentee_name)} ${window.escapeHtml(booking.mentee_surname)}`;
             otherUserAvatar = window.getAvatarUrl(booking.mentee_avatar);
         } else {
-            otherUserName = `${booking.mentor_name} ${booking.mentor_surname}`;
+            otherUserName = `${window.escapeHtml(booking.mentor_name)} ${window.escapeHtml(booking.mentor_surname)}`;
             otherUserAvatar = window.getAvatarUrl(booking.mentor_avatar);
         }
 
