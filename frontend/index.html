@@ -89,39 +89,11 @@
                 <h2 class="fw-bold">I Nostri Mentor in Evidenza</h2>
                 <p class="text-muted">Impara dai migliori professionisti del settore</p>
             </div>
-            <div class="row g-4">
-                <!-- Mentor 1 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm text-center p-3">
-                        <div class="card-body">
-                            <img src="https://i.pravatar.cc/150?img=68" class="rounded-circle mb-3" width="100" height="100" alt="Mentor">
-                            <h5 class="card-title fw-bold">Marco Rossi</h5>
-                            <p class="text-primary mb-2">Senior Software Engineer</p>
-                            <p class="text-muted small">"Aiuto sviluppatori junior a diventare senior. Esperto in React e Node.js."</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mentor 2 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm text-center p-3">
-                        <div class="card-body">
-                            <img src="https://i.pravatar.cc/150?img=44" class="rounded-circle mb-3" width="100" height="100" alt="Mentor">
-                            <h5 class="card-title fw-bold">Giulia Bianchi</h5>
-                            <p class="text-primary mb-2">Product Manager</p>
-                            <p class="text-muted small">"Trasforma le tue idee in prodotti di successo. Strategia, roadmap e UX."</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mentor 3 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm text-center p-3">
-                        <div class="card-body">
-                            <img src="https://i.pravatar.cc/150?img=12" class="rounded-circle mb-3" width="100" height="100" alt="Mentor">
-                            <h5 class="card-title fw-bold">Luca Verdi</h5>
-                            <p class="text-primary mb-2">Data Scientist</p>
-                            <p class="text-muted small">"Scopri il potere dei dati. Python, Machine Learning e AI per il business."</p>
-                        </div>
-                    </div>
+            
+            <!-- Contenitore Mentor Dinamici -->
+            <div class="row g-4" id="featured-mentors">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary" role="status"></div>
                 </div>
             </div>
             <div class="text-center mt-5">
@@ -131,50 +103,11 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5 mt-auto">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <h5 class="fw-bold mb-3"><i class="fas fa-graduation-cap me-2"></i>MentorMatch</h5>
-                    <p class="text-white-50 small">La piattaforma che connette ambizione ed esperienza. Trova il tuo mentor oggi stesso e inizia a costruire il tuo futuro.</p>
-                </div>
-                <div class="col-md-2">
-                    <h6 class="fw-bold mb-3">Link Rapidi</h6>
-                    <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="/" class="text-white-50 text-decoration-none">Home</a></li>
-                        <li class="mb-2"><a href="/login.html" class="text-white-50 text-decoration-none">Accedi</a></li>
-                        <li class="mb-2"><a href="/register.html" class="text-white-50 text-decoration-none">Registrati</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <h6 class="fw-bold mb-3">Legale</h6>
-                    <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Termini di Servizio</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Cookie Policy</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h6 class="fw-bold mb-3">Contattaci</h6>
-                    <p class="text-white-50 small mb-2"><i class="fas fa-envelope me-2"></i> info@mentormatch.com</p>
-                    <p class="text-white-50 small mb-2"><i class="fas fa-phone me-2"></i> +39 02 12345678</p>
-                    <div class="mt-3">
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <hr class="border-secondary my-4">
-            <div class="text-center text-white-50 small">
-                &copy; 2023 MentorMatch. Tutti i diritti riservati.
-            </div>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/global.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>

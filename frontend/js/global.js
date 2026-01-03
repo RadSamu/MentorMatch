@@ -67,6 +67,9 @@ window.ApiService = {
 $(document).ready(function() {
     // Carica la navbar nel placeholder
     $('#navbar-placeholder').load('/components/navbar.html', function() {
+        // Carica anche il footer se presente il placeholder
+        $('#footer-placeholder').load('/components/footer.html');
+
         // Questa funzione viene eseguita DOPO che la navbar è stata caricata
         
         // Aggiungi FontAwesome per l'icona della campanella
