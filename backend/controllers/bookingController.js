@@ -53,29 +53,12 @@ exports.createBooking = async (req, res) => {
         // Generiamo un link di meeting simulato
         const mockMeetingLink = `https://meet.google.com/mock-${Math.random().toString(36).substring(7)}`;
 
-        // 5. Controlla se esiste già una prenotazione CANCELLATA per questo slot
-        const existingCanceledBooking = await client.query(
-            "SELECT * FROM bookings WHERE slot_id = $1 AND status = 'canceled'",
-            [availability_id]
+        // 5. Crea una nuova prenotazione (FIX: Non riciclare mai prenotazioni cancellate per mantenere lo storico)
+        const result = await client.query(
+            "INSERT INTO bookings (slot_id, mentor_id, mentee_id, status, price, meeting_link) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+            [availability_id, slot.mentor_id, mentee_id, initialStatus, price, mockMeetingLink]
         );
-
-        let newBooking;
-        if (existingCanceledBooking.rows.length > 0) {
-            // Se esiste, RIATTIVALA aggiornando il mentee e lo stato
-            const bookingToUpdate = existingCanceledBooking.rows[0];
-            const result = await client.query(
-                "UPDATE bookings SET mentee_id = $1, status = $2, price = $3, meeting_link = $4, updated_at = now() WHERE id = $5 RETURNING *",
-                [mentee_id, initialStatus, price, mockMeetingLink, bookingToUpdate.id]
-            );
-            newBooking = result.rows[0];
-        } else {
-            // Altrimenti, crea una nuova prenotazione
-            const result = await client.query(
-                "INSERT INTO bookings (slot_id, mentor_id, mentee_id, status, price, meeting_link) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-                [availability_id, slot.mentor_id, mentee_id, initialStatus, price, mockMeetingLink]
-            );
-            newBooking = result.rows[0];
-        }
+        const newBooking = result.rows[0];
 
         // 6. Crea una notifica per il MENTOR usando type e payload
         const menteeUser = await client.query('SELECT name, surname FROM users WHERE id = $1', [mentee_id]);
