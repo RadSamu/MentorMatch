@@ -83,6 +83,19 @@ window.Loading = {
     }
 };
 
+// --- Helper per Avatar URL Sicuro ---
+window.getAvatarUrl = function(url) {
+    if (!url) return window.DEFAULT_AVATAR;
+    // Se l'URL contiene domini non più validi, usa il default
+    if (url.includes('via.placeholder.com') || url.includes('placehold.co') || url.includes('pravatar.cc')) {
+        return window.DEFAULT_AVATAR;
+    }
+    // Se è già un data URI o un URL assoluto valido, usalo
+    if (url.startsWith('data:') || url.startsWith('http')) return url;
+    // Altrimenti assumi che sia un percorso relativo e aggiungi BASE_URL
+    return `${window.ApiService.BASE_URL}${url}`;
+};
+
 $(document).ready(function() {
     // Carica la navbar nel placeholder
     $('#navbar-placeholder').load('/components/navbar.html', function() {
@@ -114,7 +127,7 @@ $(document).ready(function() {
 
             // Carica i dati utente per la navbar
             ApiService.get('/auth/me').done(function(user) {
-                const avatarUrl = user.avatar_url ? `${ApiService.BASE_URL}${user.avatar_url}` : window.DEFAULT_AVATAR;
+                const avatarUrl = window.getAvatarUrl(user.avatar_url);
                 $('#nav-user-name').text(user.name);
                 $('#nav-user-email').text(user.email);
                 $('#nav-user-avatar').attr('src', avatarUrl);

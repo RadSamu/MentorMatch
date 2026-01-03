@@ -16,11 +16,8 @@ $(document).ready(function() {
             $('#languages').val(user.languages ? user.languages.join(', ') : '');
             $('#hourly_rate').val(user.hourly_rate || ''); // Popola il prezzo
             
-            if (user.avatar_url) {
-                // Usa BASE_URL se definito in global.js, altrimenti percorso relativo
-                const baseUrl = ApiService.BASE_URL || '';
-                $('#avatar-preview').attr('src', `${baseUrl}${user.avatar_url}`);
-            }
+            // Usa il helper per gestire avatar null o link rotti
+            $('#avatar-preview').attr('src', window.getAvatarUrl(user.avatar_url));
 
             // Badge Ruolo
             const roleBadge = user.role === 'mentor' 
@@ -53,8 +50,7 @@ $(document).ready(function() {
 
             ApiService.upload('/users/avatar', formData)
                 .done(function(response) {
-                    const baseUrl = ApiService.BASE_URL || '';
-                    $('#avatar-preview').attr('src', `${baseUrl}${response.avatar_url}`);
+                    $('#avatar-preview').attr('src', window.getAvatarUrl(response.avatar_url));
                     showToast('Foto profilo aggiornata con successo!', 'success');
                 })
                 .fail(function() {
