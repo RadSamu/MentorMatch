@@ -70,6 +70,9 @@ $(document).ready(function() {
     $('#profile-form').on('submit', function(e) {
         e.preventDefault();
 
+        const submitBtn = $(this).find('button[type="submit"]');
+        Loading.start(submitBtn); // Mostra spinner
+
         const data = {
             headline: $('#headline').val(),
             bio: $('#bio').val(),
@@ -85,6 +88,9 @@ $(document).ready(function() {
             })
             .fail(function(xhr) {
                 showToast('Errore aggiornamento: ' + (xhr.responseJSON?.msg || 'Errore server'), 'danger');
+            })
+            .always(function() {
+                Loading.stop(submitBtn); // Ripristina pulsante
             });
     });
 
