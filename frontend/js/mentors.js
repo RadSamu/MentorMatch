@@ -102,7 +102,11 @@ $(document).ready(function() {
                     // Prepariamo i testi, con un messaggio di fallback se non sono stati inseriti
                     const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
                     const headline = window.escapeHtml(mentor.sector || 'Nessuna specializzazione indicata');
-                    const bioSnippet = window.escapeHtml(mentor.bio ? mentor.bio.substring(0, 100) + '...' : 'Nessuna biografia disponibile.');
+                    
+                    const bioText = mentor.bio || '';
+                    const bioSnippet = bioText.length > 100 
+                        ? window.escapeHtml(bioText.substring(0, 100)) + '...' 
+                        : window.escapeHtml(bioText) || 'Nessuna biografia disponibile.';
 
                     const isFavorite = favoriteMentorIds.includes(mentor.id);
                     const heartClass = isFavorite ? 'fas favorited' : 'far'; // 'fas' per pieno, 'far' per vuoto
