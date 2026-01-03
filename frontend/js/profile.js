@@ -74,7 +74,7 @@ $(document).ready(function() {
             headline: $('#headline').val(),
             bio: $('#bio').val(),
             languages: $('#languages').val().split(',').map(l => l.trim()).filter(l => l), // Converte stringa in array
-            hourly_rate: $('#hourly_rate').val() // Invia il prezzo
+            hourly_rate: $('#hourly_rate').val() ? parseFloat($('#hourly_rate').val()) : null // Invia il prezzo come numero o null
         };
 
         ApiService.put('/users/profile', data)
