@@ -6,8 +6,10 @@ const pool = require('../config/db');
  * @access  Pubblico
  */
 exports.getAllMentors = async (req, res) => {
-    const { search, sector, language, min_rating, page = 1, limit = 9 } = req.query;
-    const offset = (page - 1) * limit;
+    const { search, sector, language, min_rating, page, limit } = req.query;
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.max(1, parseInt(limit, 10) || 9);
+    const offset = (pageNum - 1) * limitNum;
 
     try {
         // Costruiamo la clausola WHERE per la ricerca
@@ -45,11 +47,11 @@ exports.getAllMentors = async (req, res) => {
         const totalQuery = `SELECT COUNT(*) FROM mentor_profiles mp ${whereClause}`;
         const totalResult = await pool.query(totalQuery, queryParams);
         const totalItems = parseInt(totalResult.rows[0].count, 10);
-        const totalPages = Math.ceil(totalItems / limit);
+        const totalPages = Math.ceil(totalItems / limitNum);
 
         // Query per ottenere i dati della pagina corrente
         const dataParams = [...queryParams];
-        dataParams.push(limit, offset);
+        dataParams.push(limitNum, offset);
         const dataQuery = `
             SELECT mp.id, mp.name, mp.surname, mp.bio, mp.sector, mp.avatar_url, mp.languages, mp.rating_avg
             FROM mentor_profiles mp
@@ -65,7 +67,7 @@ exports.getAllMentors = async (req, res) => {
             pagination: {
                 totalItems,
                 totalPages,
-                currentPage: parseInt(page, 10)
+                currentPage: pageNum
             }
         });
   } catch (err) {

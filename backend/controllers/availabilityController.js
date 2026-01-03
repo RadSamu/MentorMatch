@@ -14,6 +14,10 @@ exports.createAvailability = async (req, res) => {
         return res.status(400).json({ msg: 'Formato data non valido.' });
     }
 
+    if (startTime < new Date()) {
+        return res.status(400).json({ msg: 'Non puoi creare disponibilità nel passato.' });
+    }
+
     try {
         // Calcoliamo l'ora di fine (es. 1 ora dopo l'inizio)
         const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
