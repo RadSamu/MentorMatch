@@ -103,6 +103,67 @@ $(document).ready(function() {
             });
     }
 
+    // --- Funzioni per Typing Indicator ---
+    function showTypingIndicator() {
+        const messagesList = $('#messages-list');
+        if ($('#typing-indicator').length === 0) {
+            const indicator = `
+                <div id="typing-indicator" class="message received mb-2">
+                    <div class="message-bubble">
+                        <div class="typing-indicator">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>`;
+            messagesList.append(indicator);
+        }
+    }
+
+    function hideTypingIndicator() {
+        $('#typing-indicator').remove();
+    }
+
+    // Funzione estratta per appendere i messaggi (usata sia direttamente che dopo il delay)
+    function appendNewMessagesToChat(newMessages) {
+        const messagesList = $('#messages-list');
+        newMessages.forEach(msg => {
+            // Aggiungiamo solo i messaggi ricevuti, quelli inviati li aggiungiamo già all'invio
+            const isFromOtherUser = parseUserId(msg.from_user) !== currentUserId;
+            
+            // WORKAROUND: Controlla se il messaggio esiste già nel DOM per evitare duplicati causati dal backend
+            const messageExists = $(`#messages-list .message[data-message-id="${msg.id}"]`).length > 0;
+
+            if (isFromOtherUser && !messageExists) {
+                
+                // Controllo se serve un divisore di data per il nuovo messaggio
+                const lastMsgElement = messagesList.find('.message').last();
+                const lastTimestamp = lastMsgElement.data('timestamp');
+                const msgDate = new Date(msg.created_at);
+                
+                if (lastTimestamp && new Date(lastTimestamp).toDateString() !== msgDate.toDateString()) {
+                    messagesList.append(`
+                        <div class="date-separator">
+                            <span>${formatDateLabel(msg.created_at)}</span>
+                        </div>
+                    `);
+                }
+
+                const item = `
+                    <div class="message received mb-2" data-message-id="${msg.id}" data-timestamp="${msg.created_at}">
+                        <div class="message-bubble">${msg.body}</div>
+                        <small class="text-muted d-block mt-1">${new Date(msg.created_at).toLocaleTimeString('it-IT', {timeStyle: 'short'})}</small>
+                    </div>`;
+                messagesList.append(item);
+            }
+        });
+        // Scrolla solo se l'utente non sta guardando i messaggi vecchi
+        const scrollHeight = messagesList[0].scrollHeight;
+        const currentScroll = messagesList.scrollTop() + messagesList.innerHeight();
+        if (scrollHeight - currentScroll < 100) { // Se l'utente è vicino al fondo
+            messagesList.scrollTop(scrollHeight);
+        }
+    }
+
     function pollForNewMessages(userId) {
         // Trova l'ID dell'ultimo messaggio visualizzato
         const lastMessageId = $('#messages-list .message').last().data('message-id') || 0;
@@ -112,49 +173,23 @@ $(document).ready(function() {
             .done(function(newMessages) {
                 console.log(`[POLL SUCCESS] Received ${newMessages.length} new messages.`);
                 if (newMessages.length > 0) {
-                    const messagesList = $('#messages-list');
-                    newMessages.forEach(msg => {
-                        // Aggiungiamo solo i messaggi ricevuti, quelli inviati li aggiungiamo già all'invio
+                    // Filtra i messaggi che sono veramente nuovi e in arrivo (per l'animazione)
+                    const incomingNewMessages = newMessages.filter(msg => {
                         const isFromOtherUser = parseUserId(msg.from_user) !== currentUserId;
-                        console.log(`> Checking message ${msg.id} from user ${msg.from_user}. Is it from other user? ${isFromOtherUser}`);
-
-                        // WORKAROUND: Controlla se il messaggio esiste già nel DOM per evitare duplicati causati dal backend
                         const messageExists = $(`#messages-list .message[data-message-id="${msg.id}"]`).length > 0;
-
-                        if (isFromOtherUser && !messageExists) {
-                            console.log(`>> YES. Message ${msg.id} is new. Appending to chat.`);
-                            
-                            // Controllo se serve un divisore di data per il nuovo messaggio
-                            const lastMsgElement = messagesList.find('.message').last();
-                            const lastTimestamp = lastMsgElement.data('timestamp');
-                            const msgDate = new Date(msg.created_at);
-                            
-                            if (lastTimestamp && new Date(lastTimestamp).toDateString() !== msgDate.toDateString()) {
-                                messagesList.append(`
-                                    <div class="date-separator">
-                                        <span>${formatDateLabel(msg.created_at)}</span>
-                                    </div>
-                                `);
-                            }
-
-                            const item = `
-                                <div class="message received mb-2" data-message-id="${msg.id}" data-timestamp="${msg.created_at}">
-                                    <div class="message-bubble">${msg.body}</div>
-                                    <small class="text-muted d-block mt-1">${new Date(msg.created_at).toLocaleTimeString('it-IT', {timeStyle: 'short'})}</small>
-                                </div>`;
-                            messagesList.append(item);
-                        } else if (messageExists) {
-                            console.log(`>> NO. Message ${msg.id} already exists. Skipping.`);
-                        }
+                        return isFromOtherUser && !messageExists;
                     });
-                    // Scrolla solo se l'utente non sta guardando i messaggi vecchi
-                    const scrollHeight = messagesList[0].scrollHeight;
-                    const currentScroll = messagesList.scrollTop() + messagesList.innerHeight();
-                    if (scrollHeight - currentScroll < 100) { // Se l'utente è vicino al fondo
-                        messagesList.scrollTop(scrollHeight);
+
+                    if (incomingNewMessages.length > 0) {
+                        showTypingIndicator();
+                        $('#messages-list').scrollTop($('#messages-list')[0].scrollHeight);
+                        setTimeout(() => {
+                            hideTypingIndicator();
+                            appendNewMessagesToChat(newMessages);
+                        }, 1500); // Simula 1.5s di scrittura
+                    } else {
+                        appendNewMessagesToChat(newMessages);
                     }
-                    // Aggiorna la lista delle conversazioni per mostrare l'ultimo messaggio
-                    // updateConversationPreview(userId, newMessages[newMessages.length - 1], false); // DISATTIVATO PER RISOLVERE IL BUG DELLA DUPLICAZIONE
                 }
             })
             .fail(function(xhr) {

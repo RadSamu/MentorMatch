@@ -252,9 +252,8 @@ $(document).ready(function() {
         if (confirm(`Sei sicuro di voler prenotare la sessione di ${slotText}?`)) {
             ApiService.post('/bookings', { availability_id: slotId })
                 .done(function(booking) {
-                    showAlert('Prenotazione effettuata con successo!', 'success');
-                    // Ricarica le disponibilità per aggiornare la lista
-                    loadMentorAvailabilities(mentorId);
+                    showSuccessAnimation('Prenotazione Confermata!');
+                    setTimeout(() => loadMentorAvailabilities(mentorId), 2000);
                 })
                 .fail(function(xhr) {
                     const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore durante la prenotazione.';

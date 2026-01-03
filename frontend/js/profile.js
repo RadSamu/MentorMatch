@@ -82,9 +82,8 @@ $(document).ready(function() {
 
         ApiService.put('/users/profile', data)
             .done(function(response) {
-                showToast('Profilo aggiornato con successo!', 'success');
-                // Ritardiamo il reload per permettere all'utente di leggere la notifica
-                setTimeout(() => window.location.reload(), 1500);
+                showSuccessAnimation('Profilo Salvato!');
+                setTimeout(() => window.location.reload(), 2000);
             })
             .fail(function(xhr) {
                 showToast('Errore aggiornamento: ' + (xhr.responseJSON?.msg || 'Errore server'), 'danger');
