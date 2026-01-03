@@ -1,51 +1,50 @@
-<nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-glass">
+<nav class="navbar navbar-expand-lg navbar-glass fixed-top">
     <div class="container">
         <a class="navbar-brand" href="/"><i class="fas fa-graduation-cap me-2"></i>MentorMatch</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/mentors.html">Trova un Mentor</a>
-                </li>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/mentors.html">Trova Mentor</a></li>
             </ul>
             <ul class="navbar-nav ms-auto align-items-center">
-                <!-- Voci per utenti non loggati (visibili di default) -->
-                <li class="nav-item" id="nav-login"><a class="nav-link" href="/login.html">Login</a></li>
-                <li class="nav-item" id="nav-register">
-                    <a class="nav-link btn btn-primary text-white px-4 ms-2 rounded-pill" href="/register.html" style="color: white !important;">Registrati</a>
-                </li>
+                <!-- Login/Register -->
+                <li class="nav-item" id="nav-login"><a class="nav-link" href="/login.html">Accedi</a></li>
+                <li class="nav-item" id="nav-register"><a class="btn btn-primary rounded-pill px-4 ms-2" href="/register.html">Registrati</a></li>
 
-                <!-- Voci per utenti loggati (nascoste di default) -->
-                <!-- Dropdown Notifiche (per utenti loggati) -->
-                <li class="nav-item dropdown" id="nav-notifications" style="display: none;">
-                    <a class="nav-link position-relative px-3" href="#" id="notification-bell" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <!-- Notifications -->
+                <li class="nav-item dropdown me-3" id="nav-notifications" style="display: none;">
+                    <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-bell fa-lg"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-count" style="display: none;">
-                            <span class="visually-hidden">unread messages</span>
+                            0
                         </span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass" aria-labelledby="notification-bell" id="notification-list">
-                        <!-- Le notifiche verranno inserite qui da JS -->
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass shadow border-0" id="notification-list" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                        <li><p class="dropdown-item text-muted text-center my-2">Nessuna notifica.</p></li>
                     </ul>
                 </li>
-                
-                <!-- Dropdown Utente Pro (per utenti loggati) -->
-                <li class="nav-item dropdown ms-3" id="nav-user-dropdown" style="display: none;">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/40" id="nav-user-avatar" class="rounded-circle nav-user-avatar me-2" width="40" height="40">
+
+                <!-- User Dropdown -->
+                <li class="nav-item dropdown" id="nav-user-dropdown" style="display: none;">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <!-- QUI C'ERA L'ERRORE: Sostituito il link rotto con l'SVG locale -->
+                        <img id="nav-user-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" class="rounded-circle nav-user-avatar me-2" width="40" height="40">
                         <span id="nav-user-name" class="fw-bold">User</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass p-3" aria-labelledby="userDropdown">
-                        <li><h6 class="dropdown-header px-0" id="nav-user-email">email@example.com</h6></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/dashboard.html"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard</a></li>
-                        <li><a class="dropdown-item" href="/profile.html"><i class="fas fa-user-edit me-2 text-primary"></i>Profilo</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass shadow border-0">
+                        <li class="px-3 py-2 border-bottom">
+                            <div class="small text-muted">Loggato come</div>
+                            <div class="fw-bold text-truncate" id="nav-user-email" style="max-width: 200px;">email@example.com</div>
+                        </li>
+                        <li><a class="dropdown-item mt-2" href="/dashboard.html"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/profile.html"><i class="fas fa-user-circle me-2 text-primary"></i>Profilo</a></li>
                         <li><a class="dropdown-item" href="/my-bookings.html"><i class="fas fa-calendar-check me-2 text-primary"></i>Prenotazioni</a></li>
                         <li><a class="dropdown-item" href="/messages.html"><i class="fas fa-envelope me-2 text-primary"></i>Messaggi</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#" id="logout-button"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logout-button"><i class="fas fa-sign-out-alt me-2"></i>Esci</a></li>
                     </ul>
                 </li>
             </ul>
