@@ -167,9 +167,10 @@ $(document).ready(function() {
                     const unreadCount = notifications.filter(n => !n.is_read).length;
 
                     if (unreadCount > 0) {
-                        notificationCountBadge.text(unreadCount).show();
+                        // Aggiungi classe pulse-badge se ci sono notifiche
+                        notificationCountBadge.text(unreadCount).show().addClass('pulse-badge');
                     } else {
-                        notificationCountBadge.hide();
+                        notificationCountBadge.hide().removeClass('pulse-badge');
                     }
 
                     if (notifications.length === 0) {

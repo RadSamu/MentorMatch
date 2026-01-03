@@ -29,7 +29,7 @@ $(document).ready(function() {
                     : `<span class="text-muted small">Nuovo</span>`;
 
                 const cardHtml = `
-                    <div class="col-md-4 fade-in">
+                    <div class="col-md-4 stagger-item">
                         <div class="card mentor-card h-100">
                             <div class="mentor-card-header">
                                 ${priceBadge}

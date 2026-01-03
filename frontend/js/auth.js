@@ -27,6 +27,8 @@ $(document).ready(function() {
             .fail(function(xhr) {
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore durante la registrazione.';
                 showAlert(errorMsg, 'danger');
+                // Effetto Shake sulla card
+                $('#register-form').closest('.card').addClass('shake').on('animationend', function() { $(this).removeClass('shake'); });
             });
     });
 
@@ -49,6 +51,8 @@ $(document).ready(function() {
             .fail(function(xhr) {
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore durante il login.';
                 showAlert(errorMsg, 'danger');
+                // Effetto Shake sulla card
+                $('#login-form').closest('.card').addClass('shake').on('animationend', function() { $(this).removeClass('shake'); });
             });
     });
 
