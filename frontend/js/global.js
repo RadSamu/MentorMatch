@@ -231,7 +231,7 @@ $(document).ready(function() {
             const notificationId = $(this).data('id');
             const link = $(this).attr('href');
 
-            ApiService.put(`/notifications/${notificationId}/read`).done(function() {
+            ApiService.put(`/notifications/${notificationId}/read`).always(function() {
                     window.location.href = link; // Reindirizza solo dopo aver segnato come letta
             });
         });

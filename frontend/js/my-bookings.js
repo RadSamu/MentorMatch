@@ -143,8 +143,9 @@ $(document).ready(function() {
         } else {
             statusBadge = `<span class="badge bg-primary rounded-pill">Confermata</span>`;
             let meetingButton = '';
-            if (booking.meeting_link) {
-                meetingButton = `<a href="${booking.meeting_link}" target="_blank" class="btn btn-sm btn-success rounded-pill me-2"><i class="fas fa-video me-1"></i> Partecipa</a>`;
+            // Controllo di sicurezza: il link deve iniziare con http o https
+            if (booking.meeting_link && (booking.meeting_link.startsWith('http://') || booking.meeting_link.startsWith('https://'))) {
+                meetingButton = `<a href="${window.escapeHtml(booking.meeting_link)}" target="_blank" class="btn btn-sm btn-success rounded-pill me-2"><i class="fas fa-video me-1"></i> Partecipa</a>`;
             }
             const cancelButton = `<button class="btn btn-sm btn-outline-danger rounded-pill cancel-booking-btn" data-booking-id="${booking.id}">Annulla</button>`;
             actionButton = meetingButton + cancelButton;

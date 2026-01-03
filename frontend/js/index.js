@@ -16,7 +16,11 @@ $(document).ready(function() {
             mentors.forEach(mentor => {
                 const avatarUrl = window.getAvatarUrl(mentor.avatar_url);
                 const headline = window.escapeHtml(mentor.sector || 'Esperto');
-                const bioSnippet = window.escapeHtml(mentor.bio ? mentor.bio.substring(0, 80) + '...' : '...');
+                
+                const bioText = mentor.bio || '';
+                const bioSnippet = bioText.length > 80 
+                    ? window.escapeHtml(bioText.substring(0, 80)) + '...' 
+                    : window.escapeHtml(bioText) || '...';
                 
                 // Badge prezzo
                 const priceBadge = mentor.hourly_rate 
