@@ -577,3 +577,14 @@ body {
     color: var(--primary-color);
     transform: translateX(5px);
 }
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0; /* Parte invisibile */
+}

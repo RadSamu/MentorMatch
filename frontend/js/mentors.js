@@ -94,7 +94,7 @@ $(document).ready(function() {
                         : `<span class="text-muted small">Nuovo</span>`;
 
                     const mentorCard = `
-                        <div class="col-md-6 col-xl-4">
+                        <div class="col-md-6 col-xl-4 fade-in">
                             <div class="card mentor-card h-100">
                                 <div class="mentor-card-header">
                                     ${priceBadge}

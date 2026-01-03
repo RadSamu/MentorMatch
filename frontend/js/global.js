@@ -64,6 +64,22 @@ window.ApiService = {
     upload(endpoint, formData) { return this.request(endpoint, 'POST', formData, true); }
 };
 
+// --- Utility per Loading Buttons ---
+window.Loading = {
+    start: function(btnSelector) {
+        const btn = $(btnSelector);
+        // Salva il testo originale se non è già salvato
+        if (!btn.data('original-text')) btn.data('original-text', btn.html());
+        btn.prop('disabled', true);
+        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Attendi...');
+    },
+    stop: function(btnSelector) {
+        const btn = $(btnSelector);
+        btn.prop('disabled', false);
+        btn.html(btn.data('original-text'));
+    }
+};
+
 $(document).ready(function() {
     // Carica la navbar nel placeholder
     $('#navbar-placeholder').load('/components/navbar.html', function() {
