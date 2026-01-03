@@ -31,6 +31,10 @@ $(document).ready(function() {
             if (user.role === 'mentor') {
                 $('#mentor-rating-display').show();
                 $('#rating-value').text(user.rating_avg || '0.0');
+            } else {
+                // Se è un mentee, nascondi i campi specifici del mentor
+                $('#hourly-rate-container').hide();
+                $('#skills-section-title').html('<i class="fas fa-language me-2"></i>Lingue');
             }
         })
         .fail(function(xhr) {
