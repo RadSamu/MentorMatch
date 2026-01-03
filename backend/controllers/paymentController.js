@@ -28,10 +28,14 @@ exports.mockPayment = async (req, res) => {
         setTimeout(async () => {
             try {
                 // Aggiorna lo stato della prenotazione a 'confirmed'
-                await pool.query(
-                    "UPDATE bookings SET status = 'confirmed', updated_at = now() WHERE id = $1",
+                // FIX: Controlla che lo stato sia ancora 'pending' per evitare di confermare prenotazioni cancellate nel frattempo
+                const result = await pool.query(
+                    "UPDATE bookings SET status = 'confirmed', updated_at = now() WHERE id = $1 AND status = 'pending'",
                     [bookingId]
                 );
+                if (result.rowCount === 0) {
+                    return; // La prenotazione non è più pending (es. cancellata), non fare nulla
+                }
                 res.status(200).json({ status: 'success', msg: 'Pagamento completato. Prenotazione confermata.' });
             } catch (err) {
                 if (process.env.NODE_ENV !== 'test') console.error('Errore durante l\'aggiornamento del pagamento:', err.message);

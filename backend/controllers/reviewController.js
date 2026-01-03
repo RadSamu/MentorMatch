@@ -23,7 +23,7 @@ exports.createReview = async (req, res) => {
       `SELECT b.mentor_id, a.end_ts 
        FROM bookings b
        JOIN availabilities a ON b.slot_id = a.id
-       WHERE b.id = $1 AND b.mentee_id = $2`,
+       WHERE b.id = $1 AND b.mentee_id = $2 AND b.status = 'confirmed'`,
       [booking_id, menteeId]
     );
 
