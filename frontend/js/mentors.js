@@ -208,7 +208,13 @@ $(document).ready(function() {
 
     // Ricarica i risultati quando si cambia il settore o si scrive nella barra di ricerca
     $('#sector-filter, #language-filter, #rating-filter, #min-price, #max-price').on('change', triggerSearch);
-    $('#search-input').on('keyup', triggerSearch);
+    
+    // BUG FIX: Aggiunto Debounce per evitare troppe chiamate API mentre si scrive
+    let searchTimeout;
+    $('#search-input').on('keyup', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(triggerSearch, 500); // Aspetta 500ms dopo l'ultima digitazione
+    });
 
     // Gestione dei click sulla paginazione
     $('#pagination-controls').on('click', '.page-link', function(event) {
