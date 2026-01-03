@@ -10,6 +10,7 @@ $(document).ready(function() {
     let currentMinPrice = '';
     let currentMaxPrice = '';
     let favoriteMentorIds = [];
+    let lastSearchRequestId = 0; // ID per tracciare l'ultima richiesta di ricerca
 
     // Funzione per caricare gli ID dei mentor preferiti
     function loadFavoriteIds() {
@@ -55,6 +56,9 @@ $(document).ready(function() {
             url += `&max_price=${maxPrice}`;
         }
 
+        // Incrementa l'ID della richiesta corrente
+        const requestId = ++lastSearchRequestId;
+
         // --- Skeleton Loading (Mostra card finte durante il caricamento) ---
         const mentorsList = $('#mentors-list');
         let skeletonHtml = '';
@@ -76,6 +80,9 @@ $(document).ready(function() {
 
         ApiService.get(url)
             .done(function(response) {
+                // FIX: Se questa richiesta è vecchia (ne è partita un'altra dopo), ignorala
+                if (requestId !== lastSearchRequestId) return;
+
                 const mentors = response.data;
                 mentorsList.empty(); // Svuota il messaggio di caricamento
 
@@ -139,6 +146,9 @@ $(document).ready(function() {
                 renderPagination(response.pagination);
             })
             .fail(function(xhr) {
+                // FIX: Ignora errori di richieste vecchie
+                if (requestId !== lastSearchRequestId) return;
+
                 $('#mentors-list').html('<div class="col"><p class="alert alert-danger">Impossibile caricare la lista dei mentor.</p></div>');
                 console.error('Errore nel caricamento dei mentor:', xhr.responseJSON);
             });
