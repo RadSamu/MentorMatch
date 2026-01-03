@@ -68,7 +68,9 @@ $(document).ready(function() {
     // Carica la navbar nel placeholder
     $('#navbar-placeholder').load('/components/navbar.html', function() {
         // Carica anche il footer se presente il placeholder
-        $('#footer-placeholder').load('/components/footer.html');
+        $('#footer-placeholder').load('/components/footer.html', function() {
+            updateFooterLinks();
+        });
 
         // Questa funzione viene eseguita DOPO che la navbar è stata caricata
         
@@ -197,4 +199,26 @@ $(document).ready(function() {
             ApiService.put('/notifications/read-all').done(() => loadNotifications(token));
         });
     });
+
+    // Funzione per aggiornare i link del footer in base allo stato di login
+    function updateFooterLinks() {
+        const token = localStorage.getItem('token');
+        const linksContainer = $('#footer-quick-links');
+        
+        if (linksContainer.length === 0) return;
+
+        linksContainer.empty();
+
+        if (token) {
+            // Utente loggato: Mostra link funzionali
+            linksContainer.append('<li class="mb-2"><a href="/dashboard.html" class="text-white-50 text-decoration-none">Dashboard</a></li>');
+            linksContainer.append('<li class="mb-2"><a href="/profile.html" class="text-white-50 text-decoration-none">Il mio Profilo</a></li>');
+            linksContainer.append('<li class="mb-2"><a href="/my-bookings.html" class="text-white-50 text-decoration-none">Le mie Prenotazioni</a></li>');
+        } else {
+            // Utente non loggato: Mostra link di accesso (default)
+            linksContainer.append('<li class="mb-2"><a href="/" class="text-white-50 text-decoration-none">Home</a></li>');
+            linksContainer.append('<li class="mb-2"><a href="/login.html" class="text-white-50 text-decoration-none">Accedi</a></li>');
+            linksContainer.append('<li class="mb-2"><a href="/register.html" class="text-white-50 text-decoration-none">Registrati</a></li>');
+        }
+    }
 });
