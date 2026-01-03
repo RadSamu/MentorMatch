@@ -15,10 +15,21 @@ const storage = multer.diskStorage({
         // Crea un nome file unico per evitare sovrascritture: user-ID-timestamp.ext
         const uniqueSuffix = `user-${req.user.id}-${Date.now()}${path.extname(file.originalname)}`;
         cb(null, uniqueSuffix);
-    }
+    },
 });
 
-const upload = multer({ storage: storage });
+// FIX: Filtro per accettare solo immagini e limitare la dimensione
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // Limite 2MB
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Formato file non supportato. Carica solo immagini (JPEG, PNG, WEBP).'), false);
+        }
+    }
+});
 
 // --- Definizione delle Rotte ---
 
