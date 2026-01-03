@@ -53,4 +53,54 @@ $(document).ready(function() {
         .fail(function() {
             $('#featured-mentors').html('<p class="text-center text-danger">Impossibile caricare i mentor.</p>');
         });
+
+    // --- Typewriter Effect Logic ---
+    const words = ["Sviluppo Web", "Marketing Digitale", "Data Science", "Design UX/UI", "Startup & Business", "Leadership"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typeSpeed = 100;
+    const deleteSpeed = 50;
+    const waitBeforeDelete = 2000;
+    const waitBeforeNext = 500;
+    const typeWriterElement = $('#typewriter-text');
+
+    function typeWriter() {
+        const currentWord = words[wordIndex];
+        
+        if (isDeleting) {
+            // Cancellazione
+            typeWriterElement.text(currentWord.substring(0, charIndex - 1));
+            charIndex--;
+        } else {
+            // Scrittura
+            typeWriterElement.text(currentWord.substring(0, charIndex + 1));
+            charIndex++;
+        }
+
+        let nextSpeed = isDeleting ? deleteSpeed : typeSpeed;
+
+        if (!isDeleting && charIndex === currentWord.length) {
+            // Parola completata, aspetta prima di cancellare
+            nextSpeed = waitBeforeDelete;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            // Cancellazione completata, passa alla prossima parola
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            nextSpeed = waitBeforeNext;
+        }
+
+        setTimeout(typeWriter, nextSpeed);
+    }
+
+    // Avvia l'effetto macchina da scrivere
+    typeWriter();
+
+    // --- Parallax Effect Logic ---
+    $(window).on('scroll', function() {
+        const scrolled = $(window).scrollTop();
+        // Muove lo sfondo a metà velocità rispetto allo scroll (effetto profondità)
+        $('.hero-section').css('background-position', 'center ' + (scrolled * 0.5) + 'px');
+    });
 });

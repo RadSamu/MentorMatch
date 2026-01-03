@@ -63,13 +63,34 @@ body {
 
 /* --- Homepage Styles --- */
 .hero-section {
-    background: linear-gradient(135deg, #0d6efd 0%, #0043a8 100%);
-    padding: 120px 0;
+    /* Aggiungiamo un'immagine di sfondo con overlay sfumato per il Parallasse */
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.9) 0%, rgba(0, 67, 168, 0.9) 100%), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center 0px; /* Posizione iniziale per JS */
+    padding: 150px 0;
     margin-bottom: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-section h1 {
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* --- Typewriter Cursor --- */
+.typewriter-cursor {
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background-color: #ffc107; /* Giallo warning */
+    margin-left: 5px;
+    vertical-align: text-bottom;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 .how-it-works-section {
