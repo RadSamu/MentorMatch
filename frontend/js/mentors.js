@@ -93,7 +93,7 @@ $(document).ready(function() {
 
                 mentors.forEach(mentor => {
                     // Prepariamo i testi, con un messaggio di fallback se non sono stati inseriti
-                    const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : 'https://placehold.co/150';
+                    const avatarUrl = mentor.avatar_url ? `${BASE_URL}${mentor.avatar_url}` : window.DEFAULT_AVATAR;
                     const headline = mentor.sector || 'Nessuna specializzazione indicata';
                     const bioSnippet = mentor.bio ? mentor.bio.substring(0, 100) + '...' : 'Nessuna biografia disponibile.';
 
