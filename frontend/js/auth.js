@@ -4,6 +4,9 @@ $(document).ready(function() {
     $('#register-form').on('submit', function(event) {
         event.preventDefault(); // Impedisce il ricaricamento della pagina
 
+        const submitBtn = $(this).find('button[type="submit"]');
+        Loading.start(submitBtn);
+
         const userData = {
             name: $('#name').val(),
             surname: $('#surname').val(),
@@ -29,12 +32,18 @@ $(document).ready(function() {
                 showAlert(errorMsg, 'danger');
                 // Effetto Shake sulla card
                 $('#register-form').closest('.card').addClass('shake').on('animationend', function() { $(this).removeClass('shake'); });
+            })
+            .always(function() {
+                Loading.stop(submitBtn);
             });
     });
 
     // Gestione del form di login
     $('#login-form').on('submit', function(event) {
         event.preventDefault();
+
+        const submitBtn = $(this).find('button[type="submit"]');
+        Loading.start(submitBtn);
 
         const credentials = {
             email: $('#email').val(),
@@ -53,6 +62,9 @@ $(document).ready(function() {
                 showAlert(errorMsg, 'danger');
                 // Effetto Shake sulla card
                 $('#login-form').closest('.card').addClass('shake').on('animationend', function() { $(this).removeClass('shake'); });
+            })
+            .always(function() {
+                Loading.stop(submitBtn);
             });
     });
 

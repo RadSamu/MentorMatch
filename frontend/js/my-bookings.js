@@ -202,6 +202,9 @@ $(document).ready(function() {
     // Gestione invio form recensione
     $('#review-form').on('submit', function(event) {
         event.preventDefault();
+        const submitBtn = $(this).find('button[type="submit"]');
+        Loading.start(submitBtn);
+
         const reviewData = {
             booking_id: $('#review-booking-id').val(),
             rating: $('#rating').val(), // Il valore viene impostato dalla logica delle stelle
@@ -217,6 +220,9 @@ $(document).ready(function() {
             .fail(function(xhr) {
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.msg : 'Errore.';
                 showToast(`Errore: ${errorMsg}`, 'danger');
+            })
+            .always(function() {
+                Loading.stop(submitBtn);
             });
     });
 
