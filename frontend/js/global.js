@@ -238,4 +238,28 @@ $(document).ready(function() {
             linksContainer.append('<li class="mb-2"><a href="/register.html" class="text-white-50 text-decoration-none">Registrati</a></li>');
         }
     }
+
+    // --- Scroll Reveal Logic ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Anima solo una volta
+            }
+        });
+    }, observerOptions);
+
+    // Funzione globale per inizializzare gli elementi scroll-reveal (utile per contenuti dinamici)
+    window.initScrollReveal = function() {
+        $('.scroll-reveal').each(function() { observer.observe(this); });
+    };
+    
+    // Avvia subito
+    window.initScrollReveal();
 });

@@ -55,10 +55,28 @@ $(document).ready(function() {
             url += `&max_price=${maxPrice}`;
         }
 
+        // --- Skeleton Loading (Mostra card finte durante il caricamento) ---
+        const mentorsList = $('#mentors-list');
+        let skeletonHtml = '';
+        for(let i=0; i<6; i++) {
+            skeletonHtml += `
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mentor-card h-100 border-0 shadow-sm">
+                        <div class="mentor-card-header skeleton" style="height: 100px;"></div>
+                        <div class="mentor-card-body p-4">
+                            <div class="skeleton w-75 mb-2" style="height: 20px;"></div>
+                            <div class="skeleton w-50 mb-3" style="height: 15px;"></div>
+                            <div class="skeleton w-100 mb-4" style="height: 60px;"></div>
+                            <div class="skeleton w-100" style="height: 40px; border-radius: 20px;"></div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+        mentorsList.html(skeletonHtml);
+
         ApiService.get(url)
             .done(function(response) {
                 const mentors = response.data;
-                const mentorsList = $('#mentors-list');
                 mentorsList.empty(); // Svuota il messaggio di caricamento
 
                 if (mentors.length === 0) {
@@ -213,6 +231,11 @@ $(document).ready(function() {
         request
             .done(() => {
                 $(this).toggleClass('fas far favorited'); // Alterna le classi per forma e colore
+                
+                // --- Heart Pop Animation ---
+                $(this).addClass('heart-pop');
+                setTimeout(() => $(this).removeClass('heart-pop'), 300); // Rimuovi classe dopo animazione
+
                 // Aggiorna l'array locale
                 if (isFavorited) {
                     favoriteMentorIds = favoriteMentorIds.filter(id => id !== mentorId);

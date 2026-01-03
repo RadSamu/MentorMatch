@@ -27,6 +27,16 @@ $(document).ready(function() {
         });
     }
 
+    // --- Skeleton Loading per Hero Section ---
+    heroContent.html(`
+        <div class="profile-hero-avatar-container skeleton"></div>
+        <div class="skeleton w-50 mx-auto mb-2" style="height: 40px;"></div>
+        <div class="skeleton w-25 mx-auto mb-3" style="height: 20px;"></div>
+        <div class="d-flex justify-content-center gap-3">
+            <div class="skeleton" style="width: 100px; height: 30px; border-radius: 20px;"></div>
+            <div class="skeleton" style="width: 100px; height: 30px; border-radius: 20px;"></div>
+        </div>
+    `);
 
     // 2. Chiama l'API per ottenere i dati del mentor specifico
     ApiService.get(`/mentors/${mentorId}`)
@@ -214,6 +224,11 @@ $(document).ready(function() {
 
         request.done(() => {
                 $(this).toggleClass('fas far favorited'); // Alterna le classi per forma e colore
+                
+                // --- Heart Pop Animation ---
+                $(this).addClass('heart-pop');
+                setTimeout(() => $(this).removeClass('heart-pop'), 300);
+
             }).fail(function() {
                 showAlert('Errore nell\'aggiornare i preferiti.', 'danger');
             });
