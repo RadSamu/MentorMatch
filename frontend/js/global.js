@@ -98,9 +98,9 @@ window.getAvatarUrl = function(url) {
 
 $(document).ready(function() {
     // Carica la navbar nel placeholder
-    $('#navbar-placeholder').load('/components/navbar.html', function() {
+    $('#navbar-placeholder').load('/components/navbar.html?v=' + new Date().getTime(), function() {
         // Carica anche il footer se presente il placeholder
-        $('#footer-placeholder').load('/components/footer.html', function() {
+        $('#footer-placeholder').load('/components/footer.html?v=' + new Date().getTime(), function() {
             updateFooterLinks();
         });
 
