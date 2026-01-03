@@ -305,4 +305,23 @@ $(document).ready(function() {
         
         setTimeout(() => { overlay.fadeOut(500, () => overlay.remove()); }, 2000);
     };
+
+    // --- Back to Top Button Logic ---
+    // Aggiunge il pulsante al body
+    $('body').append('<div id="back-to-top" class="back-to-top"><i class="fas fa-arrow-up"></i></div>');
+    
+    const backToTopBtn = $('#back-to-top');
+    
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > 300) {
+            backToTopBtn.addClass('visible');
+        } else {
+            backToTopBtn.removeClass('visible');
+        }
+    });
+
+    backToTopBtn.on('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    });
 });
