@@ -3,6 +3,8 @@ require('dotenv').config(); // Carica le variabili dal file .env
 const express = require('express');
 const path = require('path');
 const app = express();
+const fs = require('fs'); // Necessario per leggere il file schema.sql
+const pool = require('./config/db'); // Necessario per eseguire la query
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 
@@ -39,6 +41,20 @@ app.use('/api/dashboard', dashboardRoutes); // Usa rotte dashboard
 app.use('/api/favorites', favoriteRoutes); // Usa rotte preferiti
 app.use('/api/messages', messageRoutes); // Usa rotte messaggi
 app.use('/api/payments', paymentRoutes); // Usa rotte pagamenti
+
+// --- ROTTA TEMPORANEA PER INIZIALIZZARE IL DB (SETUP) ---
+// Visita https://tua-app.onrender.com/setup-db per creare le tabelle
+app.get('/setup-db', async (req, res) => {
+    try {
+        const schemaPath = path.join(__dirname, '../database/schema.sql');
+        const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+        await pool.query(schemaSql);
+        res.send('<h1>Database inizializzato con successo! 🚀</h1><p>Le tabelle sono state create. Ora puoi usare l\'app.</p>');
+    } catch (err) {
+        console.error('Errore setup DB:', err);
+        res.status(500).send('<h1>Errore durante il setup</h1><pre>' + err.message + '</pre>');
+    }
+});
 
 // Serve i file statici del frontend
 // Nota: Nel container Docker, il frontend è copiato in '../frontend' rispetto al backend
