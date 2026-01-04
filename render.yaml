@@ -9,6 +9,8 @@ services:
     envVars:
       - key: PORT
         value: 3000
+      - key: NODE_ENV
+        value: production
       - key: DB_HOST
         fromDatabase:
           name: mentormatch-db
@@ -29,8 +31,6 @@ services:
         value: 5432
       - key: JWT_SECRET
         generateValue: true # Render genererà una chiave sicura per noi
-      - key: FRONTEND_URL
-        value: https://mentormatch-app.onrender.com # Questo verrà aggiornato automaticamente o manualmente
 
 databases:
   - name: mentormatch-db
