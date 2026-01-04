@@ -53,6 +53,18 @@ app.get(/.*/, (req, res) => {
     }
 });
 
+// Middleware globale per la gestione degli errori (es. errori di Multer)
+app.use((err, req, res, next) => {
+    if (err.message === 'Formato file non supportato. Carica solo immagini (JPEG, PNG, WEBP).') {
+        return res.status(400).json({ msg: err.message });
+    }
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ msg: 'Il file è troppo grande. Dimensione massima 2MB.' });
+    }
+    console.error(err.stack);
+    res.status(500).json({ msg: 'Si è verificato un errore interno del server.' });
+});
+
 // Start the server
 if (require.main === module) {
   app.listen(port, () => {
