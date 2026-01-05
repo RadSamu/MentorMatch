@@ -4,7 +4,7 @@ services:
     name: mentormatch-app
     env: docker
     plan: free
-    region: frankfurt # O 'oregon', 'singapore', etc.
+    region: oregon # Spostiamo l'app in Oregon dove si trova il database
     branch: main # Impostiamo il branch su cui stiamo lavorando
     envVars:
       - key: PORT
@@ -23,4 +23,4 @@ databases:
     plan: free
     databaseName: mentormatch
     user: admin
-    region: frankfurt # Importante: deve essere nella stessa regione del servizio web
+    region: oregon # Allineiamo la configurazione alla regione attuale del DB
