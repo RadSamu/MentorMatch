@@ -145,7 +145,7 @@ exports.forgotPassword = async (req, res) => {
     );
 
     // 3. Crea l'URL di reset e invia l'email
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = process.env.FRONTEND_URL || process.env.RENDER_EXTERNAL_URL || 'http://localhost:3000';
     const resetUrl = `${frontendUrl}/reset-password.html?token=${resetToken}`;
     const message = `
       <h1>Hai richiesto un reset della password</h1>
