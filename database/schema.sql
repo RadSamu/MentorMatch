@@ -1,6 +1,16 @@
 -- Schema MentorMatch (Postgres)
 -- Assumptions: PostgreSQL >= 9.5
 
+-- ---------- CLEANUP (DROP EXISTING) ----------
+DROP TABLE IF EXISTS messages CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS favorites CASCADE;
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS availabilities CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TYPE IF EXISTS booking_status CASCADE;
+
 -- ---------- ENUMS ----------
 CREATE TYPE booking_status AS ENUM ('pending','confirmed','canceled','done');
 
