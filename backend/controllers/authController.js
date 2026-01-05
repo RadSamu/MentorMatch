@@ -52,7 +52,8 @@ exports.register = async (req, res) => {
     );
   } catch (err) {
     if (process.env.NODE_ENV !== 'test') console.error(err.message);
-    res.status(500).send('Errore del server');
+    // DEBUG: Restituiamo l'errore esatto per capire cosa non va (es. violazione vincoli DB)
+    res.status(500).json({ msg: 'Errore del server', error: err.message });
   }
 };
 
@@ -101,7 +102,7 @@ exports.login = async (req, res) => {
     );
   } catch (err) {
     if (process.env.NODE_ENV !== 'test') console.error(err.message);
-    res.status(500).send('Errore del server');
+    res.status(500).json({ msg: 'Errore del server', error: err.message });
   }
 };
 
