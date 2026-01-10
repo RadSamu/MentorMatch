@@ -23,7 +23,7 @@ exports.createBooking = async (req, res) => {
 
         // 2. Seleziona lo slot e lo blocca per evitare race conditions
         const slotQuery = await client.query(
-            'SELECT id, mentor_id, start_ts, is_booked FROM availabilities WHERE id = $1 FOR UPDATE', 
+            'SELECT id, mentor_id, start_ts, is_booked, meeting_link FROM availabilities WHERE id = $1 FOR UPDATE', 
             [availability_id]
         );
         const slot = slotQuery.rows[0];
@@ -50,13 +50,13 @@ exports.createBooking = async (req, res) => {
         const price = parseFloat(mentorRes.rows[0].hourly_rate || 0);
         const initialStatus = price > 0 ? 'pending' : 'confirmed';
         
-        // Generiamo un link di meeting simulato
-        const mockMeetingLink = `https://meet.google.com/mock-${Math.random().toString(36).substring(7)}`;
+        // Usa il link fornito dal mentor, altrimenti generane uno simulato
+        const finalMeetingLink = slot.meeting_link || `https://meet.google.com/mock-${Math.random().toString(36).substring(7)}`;
 
         // 5. Crea una nuova prenotazione (FIX: Non riciclare mai prenotazioni cancellate per mantenere lo storico)
         const result = await client.query(
             "INSERT INTO bookings (slot_id, mentor_id, mentee_id, status, price, meeting_link) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-            [availability_id, slot.mentor_id, mentee_id, initialStatus, price, mockMeetingLink]
+            [availability_id, slot.mentor_id, mentee_id, initialStatus, price, finalMeetingLink]
         );
         const newBooking = result.rows[0];
 
