@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const cors = require('cors');
+const helmet = require('helmet');
 const port = process.env.PORT || 3000;
 
 // Importa le rotte
@@ -21,6 +22,13 @@ const paymentRoutes = require('./routes/paymentRoutes'); // Importa rotte pagame
 
 // Middleware to parse JSON requests
 app.use(cors()); // Abilita CORS per tutte le rotte
+
+// Sicurezza: Helmet imposta vari header HTTP per proteggere l'app
+// Disabilitiamo contentSecurityPolicy per evitare problemi con i CDN (Bootstrap, jQuery) del frontend
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
+
 app.use(express.json());
 
 // Rendi la cartella 'uploads' accessibile pubblicamente
