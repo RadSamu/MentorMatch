@@ -28,7 +28,13 @@
 *   **DevOps:** Docker, Render (Cloud PaaS), CI/CD.
 *   **Testing:** Jest, Supertest.
 
-## 📂 Struttura del Progetto
+## 📚 Documentazione Tecnica
+
+Per dettagli approfonditi su API, Schema Database e Architettura, consulta il file dedicato:
+
+👉 **[DOCUMENTATION.md](./DOCUMENTATION.md)**
+
+## Struttura del Progetto
 
 ```
 MentorMatch/
