@@ -87,6 +87,7 @@ $(document).ready(function() {
     function populateMenteeActions() {
         const menteeActions = $('#mentee-actions-row');
         menteeActions.empty();
+        menteeActions.append(createDashboardCard('/profile.html', 'fa-user-edit', 'Il mio Profilo', 'Aggiorna i tuoi dati e la foto profilo.'));
         menteeActions.append(createDashboardCard('/mentors.html', 'fa-search', 'Trova un Mentor', 'Cerca il professionista perfetto per te.'));
         menteeActions.append(createDashboardCard('/my-bookings.html', 'fa-book-reader', 'Le mie Prenotazioni', 'Visualizza e gestisci le tue sessioni.'));
         menteeActions.append(createDashboardCard('/messages.html', 'fa-comments', 'Messaggi', 'Comunica con i tuoi mentor.'));
