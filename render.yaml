@@ -5,6 +5,14 @@ services:
     env: docker
     plan: free
     region: oregon # Spostiamo l'app in Oregon dove si trova il database
+    healthCheckPath: /api/health # Render chiamerà questo endpoint per verificare che l'app sia viva
+    # --- CONFIGURAZIONE SCALING (Richiede piano 'starter' o superiore) ---
+    # numInstances: 1
+    # scaling:
+    #   minInstances: 1
+    #   maxInstances: 3
+    #   targetMemoryPercent: 75
+    #   targetCPUPercent: 75
     branch: main # Impostiamo il branch su cui stiamo lavorando
     envVars:
       - key: PORT
