@@ -40,6 +40,11 @@ app.use('/api/favorites', favoriteRoutes); // Usa rotte preferiti
 app.use('/api/messages', messageRoutes); // Usa rotte messaggi
 app.use('/api/payments', paymentRoutes); // Usa rotte pagamenti
 
+// --- MONITORAGGIO: Health Check Endpoint ---
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() });
+});
+
 // Serve i file statici del frontend
 // Nota: Nel container Docker, il frontend è copiato in '../frontend' rispetto al backend
 app.use(express.static(path.join(__dirname, '../frontend')));
