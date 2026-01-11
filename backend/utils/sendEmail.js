@@ -19,8 +19,9 @@ const sendEmail = async (options) => {
                 user: smtpUser,
                 pass: smtpPass,
             },
-            connectionTimeout: 10000, // 10 secondi
-            greetingTimeout: 10000
+            family: 4, // FIX: Forza l'uso di IPv4 per evitare blocchi/timeout di rete su Render
+            connectionTimeout: 20000, // Aumentiamo a 20 secondi per connessioni lente
+            greetingTimeout: 20000
         });
 
         // 3. Definisci le opzioni dell'email
