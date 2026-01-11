@@ -127,6 +127,7 @@ exports.getMe = async (req, res) => {
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
+  console.log(`[DEBUG] Richiesta forgotPassword ricevuta per: ${email}`);
 
   try {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
