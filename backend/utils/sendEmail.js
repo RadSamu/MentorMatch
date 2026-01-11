@@ -45,6 +45,7 @@ const sendEmail = async (options) => {
     };
 
     // 3. Invia l'email
+    console.log(`[DEBUG] Tentativo invio email a ${options.email} (Host: ${process.env.SMTP_HOST || 'Ethereal'})`);
     const info = await transporter.sendMail(mailOptions);
 
     // Se abbiamo usato Ethereal, stampiamo il link nel terminale
