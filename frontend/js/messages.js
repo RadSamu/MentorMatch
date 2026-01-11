@@ -104,6 +104,22 @@ $(document).ready(function() {
             });
     }
 
+    // --- OTTIMIZZAZIONE: Gestione Visibilità Pagina ---
+    // Mette in pausa il polling se l'utente cambia scheda per risparmiare risorse
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        } else {
+            const receiverId = parseUserId($('#receiver-id-input').val());
+            if (receiverId && !pollingInterval) {
+                pollingInterval = setInterval(() => pollForNewMessages(receiverId), 3000);
+            }
+        }
+    });
+
     // --- Funzioni per Typing Indicator ---
     function showTypingIndicator() {
         const messagesList = $('#messages-list');
