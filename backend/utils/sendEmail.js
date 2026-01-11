@@ -1,20 +1,20 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-    // Crea il transporter usando le variabili d'ambiente (dal file .env)
+    // Crea il transporter usando le variabili d'ambiente o i valori di fallback (Ethereal)
     const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
+        host: process.env.SMTP_HOST || 'smtp.ethereal.email',
+        port: process.env.SMTP_PORT || 587,
         secure: false,
         auth: {
-            user: process.env.SMTP_EMAIL,
-            pass: process.env.SMTP_PASSWORD,
+            user: process.env.SMTP_EMAIL || 'darwin.haag3@ethereal.email',
+            pass: process.env.SMTP_PASSWORD || 'wtN76q9rB7e5bQj7Xg',
         },
     });
 
     // Definisci le opzioni dell'email
     const mailOptions = {
-        from: `"${process.env.FROM_NAME}" <${process.env.FROM_EMAIL}>`,
+        from: `"${process.env.FROM_NAME || 'MentorMatch'}" <${process.env.FROM_EMAIL || 'noreply@mentormatch.com'}>`,
         to: options.email,
         subject: options.subject,
         html: options.message,
