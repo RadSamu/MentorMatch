@@ -22,7 +22,7 @@ $(document).ready(function() {
         },
         locale: 'it', // Lingua italiana
         slotMinTime: '08:00:00', // Orario di inizio visualizzato
-        slotMaxTime: '20:00:00', // Orario di fine visualizzato
+        slotMaxTime: '23:00:00', // Orario di fine visualizzato (esteso fino alle 23)
         allDaySlot: false, // Nasconde la riga "tutto il giorno"
         selectable: true, // Permette di selezionare gli slot
         
