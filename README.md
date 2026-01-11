@@ -1,8 +1,10 @@
 # 🎓 MentorMatch
 
-**MentorMatch** è una piattaforma web che connette professionisti esperti (**Mentor**) con persone desiderose di imparare (**Mentee**). Permette di gestire disponibilità, prenotare sessioni di mentoring 1:1, lasciare recensioni e gestire il proprio percorso di crescita professionale.
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Node Version](https://img.shields.io/badge/node-v18%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-![MentorMatch Hero](https://via.placeholder.com/1200x400?text=MentorMatch+Platform)
+**MentorMatch** è una piattaforma web che connette professionisti esperti (**Mentor**) con persone desiderose di imparare (**Mentee**). Permette di gestire disponibilità, prenotare sessioni di mentoring 1:1, lasciare recensioni e gestire il proprio percorso di crescita professionale.
 
 ## 🚀 Funzionalità Principali
 
@@ -95,6 +97,14 @@ Il server sarà attivo su `http://localhost:3000`.
 
 ### 5. Avvia il Frontend
 Poiché il backend serve anche i file statici, basta visitare `http://localhost:3000` nel browser.
+
+### 🔐 Credenziali Demo (Opzionale)
+Per testare rapidamente la piattaforma, puoi creare questi utenti (o usarli se hai popolato il DB con dati di seed):
+
+| Ruolo | Email | Password |
+|-------|-------|----------|
+| **Mentee** | `mentee@example.com` | `password123` |
+| **Mentor** | `mentor@example.com` | `password123` |
 
 ---
 
