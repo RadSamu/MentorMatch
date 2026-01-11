@@ -49,6 +49,15 @@
                     <p class="text-muted mb-3">Stai aggiungendo uno slot per: <strong id="slot-date-display" class="text-dark"></strong></p>
                     <form id="add-slot-form">
                         <div class="form-floating mb-3">
+                            <select class="form-select" id="slot-duration">
+                                <option value="30">30 Minuti</option>
+                                <option value="60" selected>1 Ora (Standard)</option>
+                                <option value="90">1 Ora e 30 Minuti</option>
+                                <option value="120">2 Ore</option>
+                            </select>
+                            <label for="slot-duration">Durata Sessione</label>
+                        </div>
+                        <div class="form-floating mb-3">
                             <input type="url" class="form-control" id="meeting-link" placeholder="https://meet.google.com/..." value="https://meet.google.com/">
                             <label for="meeting-link">Link Videochiamata (es. Google Meet)</label>
                         </div>
