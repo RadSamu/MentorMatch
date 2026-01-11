@@ -127,10 +127,12 @@ exports.getMe = async (req, res) => {
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
+  console.log(`[DEBUG] Richiesta reset password ricevuta per: ${email}`);
 
   try {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (userResult.rows.length === 0) {
+      console.log(`[DEBUG] Utente NON TROVATO nel database: ${email}`);
       // Non riveliamo che l'utente non esiste per sicurezza
       return res.status(200).json({ msg: 'Se un utente con questa email esiste, riceverà un link per il reset.' });
     }
@@ -157,12 +159,14 @@ exports.forgotPassword = async (req, res) => {
       <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
     `;
 
+    console.log(`[DEBUG] Utente trovato. Tentativo invio email a ${user.email}...`);
     await sendEmail({
       email: user.email,
       subject: 'Reset della Password - MentorMatch',
       message,
     });
 
+    console.log(`[DEBUG] Procedura invio completata.`);
     res.status(200).json({ msg: 'Email per il reset della password inviata.' });
 
   } catch (err) {
