@@ -1,17 +1,6 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-    // --- LOG DI SICUREZZA (SALVAVITA) ---
-    // Stampiamo il contenuto dell'email PRIMA di inviarla.
-    // Se l'invio fallisce o Ethereal è lento, hai comunque il link qui.
-    console.log('================================================================');
-    console.log('📧 EMAIL IN USCITA (Copia il link qui sotto):');
-    console.log(`A: ${options.email}`);
-    console.log(`Oggetto: ${options.subject}`);
-    console.log('--- Contenuto HTML (Cerca il link href=...) ---');
-    console.log(options.message);
-    console.log('================================================================');
-
     try {
         // Crea il transporter usando le variabili d'ambiente o i valori di fallback (Ethereal)
         const transporter = nodemailer.createTransport({
@@ -22,7 +11,7 @@ const sendEmail = async (options) => {
                 user: process.env.SMTP_EMAIL || 'green5@ethereal.email',
                 pass: process.env.SMTP_PASSWORD || 'j8UqCppGtXVcz4Nx17',
             },
-            connectionTimeout: 5000, // Timeout breve per non bloccare tutto
+            connectionTimeout: 10000, // 10 secondi per evitare timeout su reti lente
         });
 
         // Definisci le opzioni dell'email
@@ -40,8 +29,8 @@ const sendEmail = async (options) => {
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     } catch (error) {
-        console.error('⚠️ Errore invio SMTP (Ignorato perché abbiamo stampato il link sopra):', error.message);
-        // Non lanciamo l'errore, così il frontend riceve "Successo" e tu usi il link dai log
+        console.error('⚠️ Errore invio email:', error.message);
+        // Non lanciamo l'errore per non far crashare il frontend, ma lo logghiamo chiaramente
     }
 };
 
