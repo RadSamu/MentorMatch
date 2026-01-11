@@ -4,37 +4,24 @@ const sendEmail = async (options) => {
     let transporter;
     console.log('[DEBUG] sendEmail() avviato.');
 
+    // Configurazione: Usa variabili d'ambiente o i valori di Ethereal specifici (green5)
+    const smtpHost = process.env.SMTP_HOST || 'smtp.ethereal.email';
+    const smtpPort = process.env.SMTP_PORT || 587;
+    const smtpUser = process.env.SMTP_EMAIL || 'green5@ethereal.email';
+    const smtpPass = process.env.SMTP_PASSWORD || 'j8UqCppGtXVcz4Nx17';
+
     try {
-        // 1. Se ci sono variabili d'ambiente SMTP valide, usa quelle (Produzione)
-        if (process.env.SMTP_HOST && process.env.SMTP_EMAIL && process.env.SMTP_PASSWORD) {
-            console.log('[DEBUG] Configurazione SMTP trovata.');
-            transporter = nodemailer.createTransport({
-                host: process.env.SMTP_HOST,
-                port: process.env.SMTP_PORT || 587,
-                secure: false,
-                auth: {
-                    user: process.env.SMTP_EMAIL,
-                    pass: process.env.SMTP_PASSWORD,
-                },
-            });
-        } else {
-            // 2. Altrimenti usa Ethereal con generazione DINAMICA (Sviluppo/Demo)
-            console.log('[DEBUG] Configurazione SMTP assente. Creazione account Ethereal...');
-            // Crea un account fresco al volo per evitare errori di credenziali scadute
-            const testAccount = await nodemailer.createTestAccount();
-            console.log(`[DEBUG] Account Ethereal creato: ${testAccount.user}`);
-            
-            transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
-                secure: false,
-                auth: {
-                    user: testAccount.user,
-                    pass: testAccount.pass,
-                },
-                connectionTimeout: 10000, // Timeout di sicurezza
-            });
-        }
+        transporter = nodemailer.createTransport({
+            host: smtpHost,
+            port: smtpPort,
+            secure: false,
+            auth: {
+                user: smtpUser,
+                pass: smtpPass,
+            },
+            connectionTimeout: 10000, // 10 secondi
+            greetingTimeout: 10000
+        });
 
         // 3. Definisci le opzioni dell'email
         const mailOptions = {
@@ -45,10 +32,10 @@ const sendEmail = async (options) => {
         };
 
         // 4. Invia l'email
-        console.log('[DEBUG] Invio messaggio in corso...');
+        console.log(`[DEBUG] Tentativo invio email a ${options.email} tramite ${smtpHost}...`);
         const info = await transporter.sendMail(mailOptions);
 
-        // 5. Stampa il link di anteprima (Solo se siamo su Ethereal)
+        // 5. Stampa il link di anteprima
         console.log('Message sent: %s', info.messageId);
         
         const previewUrl = nodemailer.getTestMessageUrl(info);
@@ -57,16 +44,6 @@ const sendEmail = async (options) => {
         }
     } catch (error) {
         console.error('[ERROR] Invio email fallito:', error.message);
-        
-        // FALLBACK: Se l'invio fallisce (es. timeout), stampiamo il contenuto per permettere il reset
-        console.log('================================================================');
-        console.log('⚠️ EMAIL FALLBACK (Copia il link qui sotto)');
-        console.log(`A: ${options.email}`);
-        console.log('--- Contenuto ---');
-        console.log(options.message);
-        console.log('================================================================');
-        
-        // Non lanciamo l'errore per evitare il 500 sul frontend
     }
 };
 
