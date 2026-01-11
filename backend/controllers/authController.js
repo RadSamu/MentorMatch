@@ -131,6 +131,7 @@ exports.forgotPassword = async (req, res) => {
   try {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (userResult.rows.length === 0) {
+      console.log(`[DEBUG] Reset password richiesto per email NON TROVATA nel DB: ${email}`);
       // Non riveliamo che l'utente non esiste per sicurezza
       return res.status(200).json({ msg: 'Se un utente con questa email esiste, riceverà un link per il reset.' });
     }
