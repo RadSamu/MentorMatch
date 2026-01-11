@@ -37,7 +37,10 @@ $(document).ready(function() {
                         end: slot.end_ts,
                         backgroundColor: slot.is_booked ? '#6c757d' : '#0d6efd', // Grigio per prenotato, Blu per disponibile
                         borderColor: slot.is_booked ? '#6c757d' : '#0d6efd',
-                        editable: !slot.is_booked // Gli slot prenotati non sono modificabili
+                        editable: !slot.is_booked, // Gli slot prenotati non sono modificabili
+                        extendedProps: {
+                            isBooked: slot.is_booked // Salviamo esplicitamente lo stato per controllarlo al click
+                        }
                     }));
                     successCallback(events);
                 })
@@ -74,7 +77,7 @@ $(document).ready(function() {
             const event = clickInfo.event;
             selectedEventId = event.id;
             
-            const isBooked = !event.extendedProps.editable;
+            const isBooked = event.extendedProps.isBooked; // FIX: Usiamo la proprietà esplicita che abbiamo salvato
             const timeStr = event.start.toLocaleString('it-IT', { weekday: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
             let contentHtml = `<p><strong>Orario:</strong> ${timeStr}</p>`;
@@ -102,6 +105,7 @@ $(document).ready(function() {
     // 1. Salva Nuovo Slot
     $('#save-slot-btn').click(function() {
         const meetingLink = $('#meeting-link').val();
+        const duration = $('#slot-duration').val(); // Recupera la durata scelta
         
         // Validazione manuale del link
         if (meetingLink && !meetingLink.match(/^https?:\/\/.+/)) {
@@ -112,7 +116,11 @@ $(document).ready(function() {
         
         Loading.start(btn);
         
-        ApiService.post('/availability', { start_time: selectedStartDate.toISOString(), meeting_link: meetingLink })
+        ApiService.post('/availability', { 
+            start_time: selectedStartDate.toISOString(), 
+            meeting_link: meetingLink,
+            duration: duration 
+        })
             .done(function() {
                 showAlert('Disponibilità aggiunta con successo!', 'success');
                 calendar.refetchEvents();
