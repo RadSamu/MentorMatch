@@ -12,6 +12,10 @@ exports.register = async (req, res) => {
     return res.status(400).json({ msg: 'Per favore, inserisci tutti i campi.' });
   }
 
+  if (password.length < 6) {
+    return res.status(400).json({ msg: 'La password deve contenere almeno 6 caratteri.' });
+  }
+
   if (role !== 'mentor' && role !== 'mentee') {
     return res.status(400).json({ msg: 'Ruolo non valido. Deve essere "mentor" o "mentee".' });
   }

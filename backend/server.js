@@ -24,9 +24,18 @@ const paymentRoutes = require('./routes/paymentRoutes'); // Importa rotte pagame
 app.use(cors()); // Abilita CORS per tutte le rotte
 
 // Sicurezza: Helmet imposta vari header HTTP per proteggere l'app
-// Disabilitiamo contentSecurityPolicy per evitare problemi con i CDN (Bootstrap, jQuery) del frontend
+// Configuriamo la Content Security Policy per permettere i CDN esterni (Bootstrap, jQuery, FontAwesome)
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://code.jquery.com", "https://kit.fontawesome.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://ka-f.fontawesome.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://ka-f.fontawesome.com"], // Necessario per le icone FontAwesome
+    },
+  },
 }));
 
 app.use(express.json());
