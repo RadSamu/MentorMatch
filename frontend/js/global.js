@@ -40,7 +40,6 @@ window.ApiService = {
     },
 
     request(endpoint, method, data = null, isFileUpload = false) {
-        console.log(`[ApiService] ${method} ${endpoint}`, data); // DEBUG
         const options = {
             url: `${this.API_URL}${endpoint}`,
             type: method,
