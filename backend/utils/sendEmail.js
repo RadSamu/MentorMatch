@@ -16,6 +16,8 @@ const sendEmail = async (options) => {
                 user: process.env.SMTP_EMAIL,
                 pass: process.env.SMTP_PASSWORD,
             },
+            logger: true, // Logga ogni step SMTP
+            debug: true   // Include i dati del traffico
         });
     } else {
         // Fallback a Ethereal (solo se non siamo in produzione o mancano le variabili)
