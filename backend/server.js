@@ -1,5 +1,12 @@
 require('dotenv').config(); // Carica le variabili dal file .env
 
+// DEBUG: Verifica configurazione SMTP all'avvio
+console.log('--- DEBUG SMTP ---');
+console.log('SMTP_HOST:', process.env.SMTP_HOST || 'MANCANTE');
+console.log('SMTP_EMAIL:', process.env.SMTP_EMAIL || 'MANCANTE');
+console.log('SMTP_PASSWORD:', process.env.SMTP_PASSWORD ? 'PRESENTE' : 'MANCANTE');
+console.log('------------------');
+
 const express = require('express');
 const path = require('path');
 const app = express();
