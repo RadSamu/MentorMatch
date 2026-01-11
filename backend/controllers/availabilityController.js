@@ -1,7 +1,7 @@
 const pool = require('../config/db');
 
 exports.createAvailability = async (req, res) => {
-    const { start_time, meeting_link } = req.body;
+    const { start_time, meeting_link, duration } = req.body;
     const mentor_id = req.user.id;
 
     // Semplice validazione
@@ -23,9 +23,15 @@ exports.createAvailability = async (req, res) => {
         return res.status(400).json({ msg: 'Il link del meeting deve essere un URL valido (http:// o https://).' });
     }
 
+    // Gestione Durata (Default 60 minuti se non specificata)
+    const durationMinutes = duration ? parseInt(duration) : 60;
+    if (isNaN(durationMinutes) || durationMinutes < 15) {
+        return res.status(400).json({ msg: 'La durata deve essere un numero valido (minimo 15 minuti).' });
+    }
+
     try {
-        // Calcoliamo l'ora di fine (es. 1 ora dopo l'inizio)
-        const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
+        // Calcoliamo l'ora di fine basata sulla durata
+        const endTime = new Date(startTime.getTime() + durationMinutes * 60 * 1000);
 
         // BUG FIX: Controlla se esiste già uno slot che si sovrappone
         const overlapCheck = await pool.query(
@@ -40,8 +46,8 @@ exports.createAvailability = async (req, res) => {
         }
 
         const newSlot = await pool.query(
-            'INSERT INTO availabilities (mentor_id, start_ts, end_ts, meeting_link) VALUES ($1, $2, $3, $4) RETURNING *',
-            [mentor_id, startTime, endTime, meeting_link]
+            'INSERT INTO availabilities (mentor_id, start_ts, end_ts, meeting_link, slot_length_minutes) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [mentor_id, startTime, endTime, meeting_link, durationMinutes]
         );
 
         res.status(201).json(newSlot.rows[0]);
