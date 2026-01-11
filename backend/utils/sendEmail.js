@@ -2,9 +2,11 @@ const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
     let transporter;
+    console.log('[DEBUG] sendEmail() avviato.');
 
     // 1. Se ci sono variabili d'ambiente SMTP valide, usa quelle (Produzione)
     if (process.env.SMTP_HOST && process.env.SMTP_EMAIL && process.env.SMTP_PASSWORD) {
+        console.log('[DEBUG] Configurazione SMTP trovata.');
         transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT || 587,
@@ -16,8 +18,10 @@ const sendEmail = async (options) => {
         });
     } else {
         // 2. Altrimenti usa Ethereal con generazione DINAMICA (Sviluppo/Demo)
+        console.log('[DEBUG] Configurazione SMTP assente. Creazione account Ethereal...');
         // Crea un account fresco al volo per evitare errori di credenziali scadute
         const testAccount = await nodemailer.createTestAccount();
+        console.log(`[DEBUG] Account Ethereal creato: ${testAccount.user}`);
         
         transporter = nodemailer.createTransport({
             host: 'smtp.ethereal.email',
@@ -40,6 +44,7 @@ const sendEmail = async (options) => {
     };
 
     // 4. Invia l'email
+    console.log('[DEBUG] Invio messaggio in corso...');
     const info = await transporter.sendMail(mailOptions);
 
     // 5. Stampa il link di anteprima (Solo se siamo su Ethereal)
