@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-    console.log('[DEBUG] sendEmail() chiamato. Generazione account Ethereal...');
     // Genera un account di test su Ethereal (Fake SMTP)
     const testAccount = await nodemailer.createTestAccount();
 
