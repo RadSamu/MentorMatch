@@ -18,6 +18,11 @@ exports.createAvailability = async (req, res) => {
         return res.status(400).json({ msg: 'Non puoi creare disponibilità nel passato.' });
     }
 
+    // Validazione URL Meeting (Sicurezza)
+    if (meeting_link && !/^https?:\/\/.+/.test(meeting_link)) {
+        return res.status(400).json({ msg: 'Il link del meeting deve essere un URL valido (http:// o https://).' });
+    }
+
     try {
         // Calcoliamo l'ora di fine (es. 1 ora dopo l'inizio)
         const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
