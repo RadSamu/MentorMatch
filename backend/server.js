@@ -23,12 +23,6 @@ const paymentRoutes = require('./routes/paymentRoutes'); // Importa rotte pagame
 // Middleware to parse JSON requests
 app.use(cors()); // Abilita CORS per tutte le rotte
 
-// DEBUG: Logga tutte le richieste in arrivo per capire se il frontend sta chiamando il backend
-app.use((req, res, next) => {
-  console.log(`[REQUEST] ${req.method} ${req.path}`);
-  next();
-});
-
 // Sicurezza: Helmet imposta vari header HTTP per proteggere l'app
 // Configuriamo la Content Security Policy per permettere i CDN esterni (Bootstrap, jQuery, FontAwesome)
 app.use(helmet({
