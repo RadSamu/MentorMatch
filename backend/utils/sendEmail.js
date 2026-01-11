@@ -8,30 +8,23 @@ const sendEmail = async (options) => {
     // Altrimenti, usiamo Ethereal per i test locali.
     if (process.env.SMTP_HOST && process.env.SMTP_EMAIL && process.env.SMTP_PASSWORD) {
         
-        const isGmail = process.env.SMTP_HOST.includes('gmail');
-        const transportConfig = {
+        // Convertiamo la porta in intero. Default a 465 (SSL) che è più robusto su Render
+        const port = parseInt(process.env.SMTP_PORT || '465');
+
+        transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: port,
+            secure: port === 465, // true per 465 (SSL), false per 587 (TLS)
             auth: {
                 user: process.env.SMTP_EMAIL,
                 pass: process.env.SMTP_PASSWORD,
             },
             family: 4, // FIX: Forza IPv4 per evitare timeout su Render/Gmail
-            // Timeout per evitare che la richiesta si blocchi all'infinito
             connectionTimeout: 10000, // 10 secondi
             greetingTimeout: 10000,
-            logger: true, // Logga ogni step SMTP
-            debug: true   // Include i dati del traffico
-        };
-
-        if (isGmail) {
-            transportConfig.service = 'gmail'; // Usa configurazione automatica per Gmail
-        } else {
-            const port = parseInt(process.env.SMTP_PORT || '587');
-            transportConfig.host = process.env.SMTP_HOST;
-            transportConfig.port = port;
-            transportConfig.secure = port === 465;
-        }
-
-        transporter = nodemailer.createTransport(transportConfig);
+            logger: true, 
+            debug: true   
+        });
     } else {
         // Fallback a Ethereal (solo se non siamo in produzione o mancano le variabili)
         if (process.env.NODE_ENV !== 'test') {
