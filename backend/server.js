@@ -33,7 +33,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://ka-f.fontawesome.com", "https://cdnjs.cloudflare.com"],
       fontSrc: ["'self'", "data:", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://ka-f.fontawesome.com"], // Necessario per le icone FontAwesome
+      connectSrc: ["'self'", "https://ka-f.fontawesome.com", "https://cdn.jsdelivr.net"], // Necessario per le icone FontAwesome e source maps
     },
   },
 }));
