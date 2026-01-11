@@ -7,15 +7,19 @@ const sendEmail = async (options) => {
     // Se abbiamo le credenziali SMTP nelle variabili d'ambiente (es. su Render), usiamo quelle.
     // Altrimenti, usiamo Ethereal per i test locali.
     if (process.env.SMTP_HOST && process.env.SMTP_EMAIL && process.env.SMTP_PASSWORD) {
-        const port = process.env.SMTP_PORT || 587;
+        // Convertiamo la porta in intero per sicurezza
+        const port = parseInt(process.env.SMTP_PORT || '587');
         transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: port,
-            secure: port == 465, // true per 465 (SSL), false per altre porte (TLS)
+            secure: port === 465, // true per 465 (SSL), false per altre porte (TLS)
             auth: {
                 user: process.env.SMTP_EMAIL,
                 pass: process.env.SMTP_PASSWORD,
             },
+            // Timeout per evitare che la richiesta si blocchi all'infinito
+            connectionTimeout: 10000, // 10 secondi
+            greetingTimeout: 10000,
             logger: true, // Logga ogni step SMTP
             debug: true   // Include i dati del traffico
         });
