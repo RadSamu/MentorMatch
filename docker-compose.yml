@@ -33,6 +33,8 @@ services:
       DB_DATABASE: mentormatch
       DB_PORT: 5432
       JWT_SECRET: la_tua_chiave_segreta_super_sicura # Cambia questa in produzione
+    env_file:
+      - ./backend/.env # Carica le variabili dal file .env del backend
     depends_on:
       db:
         condition: service_healthy
