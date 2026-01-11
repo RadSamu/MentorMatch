@@ -1,23 +1,20 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-    // Genera un account di test su Ethereal (Fake SMTP)
-    const testAccount = await nodemailer.createTestAccount();
-
-    // Crea il transporter usando Ethereal
+    // Crea il transporter usando le variabili d'ambiente (dal file .env)
     const transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
         secure: false,
         auth: {
-            user: testAccount.user,
-            pass: testAccount.pass,
+            user: process.env.SMTP_EMAIL,
+            pass: process.env.SMTP_PASSWORD,
         },
     });
 
     // Definisci le opzioni dell'email
     const mailOptions = {
-        from: '"MentorMatch" <noreply@mentormatch.com>',
+        from: `"${process.env.FROM_NAME}" <${process.env.FROM_EMAIL}>`,
         to: options.email,
         subject: options.subject,
         html: options.message,
