@@ -89,9 +89,22 @@ app.use((err, req, res, next) => {
 
 // Start the server
 if (require.main === module) {
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Server in ascolto su http://localhost:${port}`); 
   });
+
+  // Gestione Graceful Shutdown (per evitare errori SIGTERM nei log di Render)
+  const shutdown = () => {
+    console.log('Ricevuto segnale di stop (SIGTERM/SIGINT). Chiusura server...');
+    server.close(() => {
+      console.log('Server HTTP chiuso.');
+      process.exit(0);
+    });
+  };
+
+  // Ascolta i segnali di terminazione inviati da Render o Docker
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
 
 module.exports = app;
