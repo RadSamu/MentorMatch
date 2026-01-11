@@ -19,8 +19,8 @@ const sendEmail = async (options) => {
             port: process.env.SMTP_PORT || 587,
             secure: false,
             auth: {
-                user: process.env.SMTP_EMAIL || 'darwin.haag3@ethereal.email',
-                pass: process.env.SMTP_PASSWORD || 'wtN76q9rB7e5bQj7Xg',
+                user: process.env.SMTP_EMAIL || 'green5@ethereal.email',
+                pass: process.env.SMTP_PASSWORD || 'j8UqCppGtXVcz4Nx17',
             },
             connectionTimeout: 5000, // Timeout breve per non bloccare tutto
         });
