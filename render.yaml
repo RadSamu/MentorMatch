@@ -25,19 +25,6 @@ services:
           property: connectionString
       - key: JWT_SECRET
         generateValue: true # Render genererà una chiave sicura per noi
-      # --- CONFIGURAZIONE EMAIL (SMTP) ---
-      - key: SMTP_HOST
-        sync: false # Non sincronizzare, inseriscilo manualmente nella dashboard di Render
-      - key: SMTP_PORT
-        value: 587
-      - key: SMTP_EMAIL
-        sync: false
-      - key: SMTP_PASSWORD
-        sync: false
-      - key: FROM_EMAIL
-        value: no-reply@mentormatch.com
-      - key: FROM_NAME
-        value: MentorMatch
 
 databases:
   - name: mentormatch-db
