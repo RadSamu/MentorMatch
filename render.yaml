@@ -36,6 +36,8 @@ services:
         sync: false
       - key: FROM_EMAIL
         value: no-reply@mentormatch.com
+      - key: FROM_NAME
+        value: MentorMatch
 
 databases:
   - name: mentormatch-db
