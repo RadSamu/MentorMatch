@@ -20,7 +20,7 @@ exports.createReview = async (req, res) => {
   try {
     // 1. Verifica che la prenotazione esista, appartenga al mentee e sia conclusa
     const bookingResult = await pool.query(
-      `SELECT b.mentor_id, a.end_ts 
+      `SELECT b.mentor_id, a.start_ts, a.end_ts
        FROM bookings b
        JOIN availabilities a ON b.slot_id = a.id
        WHERE b.id = $1 AND b.mentee_id = $2 AND b.status = 'confirmed'`,
@@ -31,9 +31,13 @@ exports.createReview = async (req, res) => {
       return res.status(404).json({ msg: 'Prenotazione non trovata o non autorizzata.' });
     }
 
-    // Opzionale: Controlla se la sessione è già avvenuta
-    if (new Date(bookingResult.rows[0].end_ts) > new Date()) {
-      return res.status(400).json({ msg: 'Non puoi recensire una sessione non ancora terminata.' });
+    // Opzionale: Controlla se la sessione è già avvenuta (controlla start_ts o end_ts se presente)
+    const slot = bookingResult.rows[0];
+    const startTs = slot.start_ts ? new Date(slot.start_ts) : null;
+    const endTs = slot.end_ts ? new Date(slot.end_ts) : null;
+
+    if ((startTs && startTs > new Date()) || (endTs && endTs > new Date())) {
+      return res.status(400).json({ msg: 'La sessione non è ancora avvenuta.' });
     }
 
     const mentorId = bookingResult.rows[0].mentor_id;
