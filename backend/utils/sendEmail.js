@@ -1,10 +1,33 @@
 const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
 const sendEmail = async (options) => {
-    let transporter;
     console.log('[DEBUG] sendEmail() avviato.');
 
-    // Configurazione: Usa variabili d'ambiente o i valori di Ethereal specifici (green5)
+    // Preferisci SendGrid se SENDGRID_API_KEY è disponibile (HTTPS, non bloccato su Render)
+    const sendgridKey = process.env.SENDGRID_API_KEY;
+    if (sendgridKey) {
+        try {
+            sgMail.setApiKey(sendgridKey);
+            const msg = {
+                to: options.email,
+                from: `${process.env.FROM_NAME || 'MentorMatch'} <${process.env.FROM_EMAIL || 'noreply@mentormatch.com'}>`,
+                subject: options.subject,
+                html: options.message,
+            };
+            console.log(`[DEBUG] Tentativo invio via SendGrid a ${options.email}...`);
+            const [response] = await sgMail.send(msg);
+            console.log('[DEBUG] Email SendGrid inviata con successo. Status:', response && response.statusCode);
+            return;
+        } catch (error) {
+            console.error('[ERROR] SendGrid fallito:', error && error.message ? error.message : error);
+            // Fallback a SMTP se SendGrid non disponibile
+        }
+    }
+
+    // Fallback: tenta SMTP (utile per sviluppo locale)
+    let transporter;
+    console.log('[DEBUG] Tentativo invio via SMTP...');
     const smtpHost = process.env.SMTP_HOST || 'smtp.ethereal.email';
     const smtpPort = process.env.SMTP_PORT || 587;
     const smtpUser = process.env.SMTP_EMAIL || 'green5@ethereal.email';
