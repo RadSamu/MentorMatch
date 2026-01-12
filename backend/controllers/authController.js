@@ -7,9 +7,9 @@ const sendEmail = require('../utils/sendEmail');
 exports.register = async (req, res) => {
   const { name, surname, email, password, role, gender } = req.body;
 
-  // 1. Validazione di base dei dati ricevuti
-  if (!name || !surname || !email || !password || !role || !gender) {
-    return res.status(400).json({ msg: 'Per favore, inserisci tutti i campi.' });
+  // 1. Validazione di base dei dati ricevuti (gender è opzionale)
+  if (!name || !surname || !email || !password || !role) {
+    return res.status(400).json({ msg: 'Per favore, inserisci tutti i campi richiesti.' });
   }
 
   if (password.length < 6) {

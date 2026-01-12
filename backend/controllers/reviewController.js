@@ -37,7 +37,7 @@ exports.createReview = async (req, res) => {
     const endTs = slot.end_ts ? new Date(slot.end_ts) : null;
 
     if ((startTs && startTs > new Date()) || (endTs && endTs > new Date())) {
-      return res.status(400).json({ msg: 'La sessione non è ancora avvenuta.' });
+      return res.status(400).json({ msg: 'La sessione non ancora avvenuta.' });
     }
 
     const mentorId = bookingResult.rows[0].mentor_id;
