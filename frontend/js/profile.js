@@ -58,6 +58,7 @@ $(document).ready(function() {
                 })
                 .always(function() {
                     $('#avatar-preview').css('opacity', '1');
+                    $('#avatar-file').val(''); // Resetta l'input per permettere nuovi tentativi
                 });
         }
     });

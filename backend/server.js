@@ -2,6 +2,7 @@ require('dotenv').config(); // Carica le variabili dal file .env
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const cors = require('cors');
 const helmet = require('helmet');
@@ -41,7 +42,11 @@ app.use(helmet({
 app.use(express.json());
 
 // Rendi la cartella 'uploads' accessibile pubblicamente
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
+app.use('/uploads', express.static(uploadsDir));
 
 // Usa le rotte per l'autenticazione
 // Tutte le rotte in auth.js avranno il prefisso /api/auth
