@@ -35,6 +35,7 @@
 Per dettagli approfonditi su API, Schema Database e Architettura, consulta il file dedicato:
 
 👉 **[DOCUMENTATION.md](./DOCUMENTATION.md)**
+👉 **[ER_DIAGRAM.md](./ER_DIAGRAM.md)**
 
 ## Struttura del Progetto
 
