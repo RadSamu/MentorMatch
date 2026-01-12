@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
+const fs = require('fs');
+const path = require('path');
 
 const sendEmail = async (options) => {
     console.log('[DEBUG] sendEmail() avviato.');
@@ -68,6 +70,23 @@ const sendEmail = async (options) => {
         }
     } catch (error) {
         console.error('[ERROR] Invio email fallito:', error.message);
+        
+        // Fallback: logga email su file se sia SendGrid che SMTP falliscono
+        try {
+            const timestamp = new Date().toISOString();
+            const logEntry = `
+[${timestamp}]
+To: ${options.email}
+Subject: ${options.subject}
+Message: ${options.message}
+---
+`;
+            const logFile = path.join(__dirname, '..', 'email_logs.txt');
+            fs.appendFileSync(logFile, logEntry);
+            console.log(`[INFO] Email loggata su file: ${logFile}`);
+        } catch (logErr) {
+            console.error('[ERROR] Impossibile loggare email su file:', logErr.message);
+        }
     }
 };
 
